@@ -476,24 +476,37 @@ let currentAdminRound = "Grupo A";
 let currentRealGroupTab = "A";
 
 // ================================================================
-// STORAGE (localStorage ahora; Supabase cuando se active)
+// STORAGE CONECTADO A SUPABASE REAL (MULTIJUGADOR)
 // ================================================================
-function load(k){try{return JSON.parse(localStorage.getItem(PREFIX+k))}catch{return null}}
-function save(k,v){localStorage.setItem(PREFIX+k,JSON.stringify(v))}
-function getRealResults(){return load("real")||{matches:{},winners:{},groups:{}}}
+let dbState = {};
+
+// Lee los datos de la memoria sincronizada
+function load(k) { return dbState[PREFIX+k] || null; }
+
+// Guarda el pronóstico y lo dispara de inmediato a la nube
+function save(k, v) {
+  dbState[PREFIX+k] = v; 
+  if(USE_SUPABASE) {
+    sbUpsert('mundial_data', { id: PREFIX+k, data: v }); 
+  }
+  localStorage.setItem(PREFIX+k, JSON.stringify(v)); 
+}
+
+function getRealResults(){ return load("real") || {matches:{},winners:{},groups:{}}; }
 
 // ================================================================
-// SUPABASE — funciones preparadas (se activan con USE_SUPABASE=true)
+// SUPABASE — Funciones de red
 // ================================================================
-async function sbFetch(table, filter=""){
+async function sbFetch(table){
   if(!USE_SUPABASE) return null;
   try{
-    const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${filter}`,{
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=*`,{
       headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":`Bearer ${SUPABASE_ANON_KEY}`}
     });
     return await r.json();
   }catch(e){console.warn("Supabase error",e);return null}
 }
+
 async function sbUpsert(table, data){
   if(!USE_SUPABASE) return;
   try{
@@ -504,6 +517,22 @@ async function sbUpsert(table, data){
     });
   }catch(e){console.warn("Supabase upsert error",e)}
 }
+
+// INICIALIZADOR: Descarga la base de datos completa apenas se abre la página
+async function initDatabase() {
+  if(USE_SUPABASE) {
+    const data = await sbFetch('mundial_data');
+    if(data) {
+      data.forEach(row => { dbState[row.id] = row.data; });
+      if(currentUser) renderRanking(); // Refresca si alguien ya inició sesión
+    }
+  } else {
+    Object.keys(localStorage).forEach(k => {
+      if(k.startsWith(PREFIX)) dbState[k] = JSON.parse(localStorage.getItem(k));
+    });
+  }
+}
+initDatabase();
 
 // ================================================================
 // API-FOOTBALL — funciones preparadas (se activan con USE_API=true)
