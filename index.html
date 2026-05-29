@@ -476,55 +476,71 @@ let currentAdminRound = "Grupo A";
 let currentRealGroupTab = "A";
 
 // ================================================================
-// STORAGE CONECTADO A SUPABASE REAL (MULTIJUGADOR)
+// STORAGE CONECTADO A SUPABASE REAL (MULTIJUGADOR CORREGIDO)
 // ================================================================
 let dbState = {};
 
-// Lee los datos de la memoria sincronizada
+// Lee los datos de la memoria local
 function load(k) { return dbState[PREFIX+k] || null; }
 
-// Guarda el pronóstico y lo dispara de inmediato a la nube
-function save(k, v) {
+// Guarda fusionando con la nube para evitar borrar a tus amigos
+async function save(k, v) {
   dbState[PREFIX+k] = v; 
-  if(USE_SUPABASE) {
-    sbUpsert('mundial_data', { id: PREFIX+k, data: v }); 
-  }
   localStorage.setItem(PREFIX+k, JSON.stringify(v)); 
+  
+  if(USE_SUPABASE) {
+    try {
+      // 1. Traer los datos más recientes de la nube
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/mundial_data?id=eq.${PREFIX+k}&select=data`, {
+         headers: {"apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`}
+      });
+      const json = await res.json();
+      
+      // 2. Mezclar los datos nuevos con los viejos para no sobreescribir a otros
+      if (json && json.length > 0) {
+         const latestData = json[0].data;
+         if (typeof v === 'object' && !Array.isArray(v) && v !== null) {
+            v = { ...latestData, ...v }; 
+         }
+      }
+      
+      // 3. Subir la versión combinada
+      await fetch(`${SUPABASE_URL}/rest/v1/mundial_data`,{
+        method:"POST",
+        headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":`Bearer ${SUPABASE_ANON_KEY}`,"Content-Type":"application/json","Prefer":"resolution=merge-duplicates"},
+        body:JSON.stringify({ id: PREFIX+k, data: v })
+      });
+      
+      dbState[PREFIX+k] = v;
+    } catch(e) { console.error("Error guardando en Supabase:", e); }
+  }
 }
 
 function getRealResults(){ return load("real") || {matches:{},winners:{},groups:{}}; }
 
 // ================================================================
-// SUPABASE — Funciones de red
+// SUPABASE — Sincronización en vivo
 // ================================================================
-async function sbFetch(table){
+async function sbFetch(){
   if(!USE_SUPABASE) return null;
   try{
-    const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=*`,{
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/mundial_data?select=*`,{
       headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":`Bearer ${SUPABASE_ANON_KEY}`}
     });
     return await r.json();
-  }catch(e){console.warn("Supabase error",e);return null}
+  }catch(e){return null;}
 }
 
-async function sbUpsert(table, data){
-  if(!USE_SUPABASE) return;
-  try{
-    await fetch(`${SUPABASE_URL}/rest/v1/${table}`,{
-      method:"POST",
-      headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":`Bearer ${SUPABASE_ANON_KEY}`,"Content-Type":"application/json","Prefer":"resolution=merge-duplicates"},
-      body:JSON.stringify(data)
-    });
-  }catch(e){console.warn("Supabase upsert error",e)}
-}
-
-// INICIALIZADOR: Descarga la base de datos completa apenas se abre la página
-async function initDatabase() {
+// Refresca la base de datos constantemente (Magia multijugador)
+async function syncDatabase() {
   if(USE_SUPABASE) {
-    const data = await sbFetch('mundial_data');
+    const data = await sbFetch();
     if(data) {
       data.forEach(row => { dbState[row.id] = row.data; });
-      if(currentUser) renderRanking(); // Refresca si alguien ya inició sesión
+      // Si estamos viendo el ranking, lo redibuja al instante
+      if(document.getElementById("page-ranking").classList.contains("active")) {
+         renderRanking();
+      }
     }
   } else {
     Object.keys(localStorage).forEach(k => {
@@ -532,7 +548,12 @@ async function initDatabase() {
     });
   }
 }
-initDatabase();
+
+// Carga inicial y auto-refresco cada 3 segundos
+syncDatabase();
+if(USE_SUPABASE) {
+  setInterval(syncDatabase, 3000);
+}
 
 // ================================================================
 // API-FOOTBALL — funciones preparadas (se activan con USE_API=true)
