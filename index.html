@@ -476,43 +476,51 @@ let currentAdminRound = "Grupo A";
 let currentRealGroupTab = "A";
 
 // ================================================================
-// STORAGE CONECTADO A SUPABASE REAL (MULTIJUGADOR CORREGIDO)
+// STORAGE CONECTADO A SUPABASE REAL (VERSIÓN BLINDADA)
 // ================================================================
 let dbState = {};
 
-// Lee los datos de la memoria local
+// 1. Cargar la memoria local de inmediato (evita pantallas vacías al inicio)
+Object.keys(localStorage).forEach(k => {
+  if(k.startsWith(PREFIX)) {
+    try { dbState[k] = JSON.parse(localStorage.getItem(k)); } catch(e){}
+  }
+});
+
 function load(k) { return dbState[PREFIX+k] || null; }
 
-// Guarda fusionando con la nube para evitar borrar a tus amigos
 async function save(k, v) {
+  // Guarda local instantáneamente para que el juego se sienta rápido
   dbState[PREFIX+k] = v; 
   localStorage.setItem(PREFIX+k, JSON.stringify(v)); 
   
   if(USE_SUPABASE) {
     try {
-      // 1. Traer los datos más recientes de la nube
+      // Leer versión de la nube para no chocar con otros
       const res = await fetch(`${SUPABASE_URL}/rest/v1/mundial_data?id=eq.${PREFIX+k}&select=data`, {
          headers: {"apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}`}
       });
-      const json = await res.json();
-      
-      // 2. Mezclar los datos nuevos con los viejos para no sobreescribir a otros
-      if (json && json.length > 0) {
-         const latestData = json[0].data;
-         if (typeof v === 'object' && !Array.isArray(v) && v !== null) {
-            v = { ...latestData, ...v }; 
+      if (res.ok) {
+         const json = await res.json();
+         if (json && json.length > 0) {
+            const latestData = json[0].data;
+            if (typeof v === 'object' && !Array.isArray(v) && v !== null) {
+               v = { ...latestData, ...v }; // Fusiona los datos pacíficamente
+            }
          }
       }
       
-      // 3. Subir la versión combinada
+      // Subir la versión combinada a la nube
       await fetch(`${SUPABASE_URL}/rest/v1/mundial_data`,{
         method:"POST",
         headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":`Bearer ${SUPABASE_ANON_KEY}`,"Content-Type":"application/json","Prefer":"resolution=merge-duplicates"},
         body:JSON.stringify({ id: PREFIX+k, data: v })
       });
       
+      // Refrescar memoria local
       dbState[PREFIX+k] = v;
-    } catch(e) { console.error("Error guardando en Supabase:", e); }
+      localStorage.setItem(PREFIX+k, JSON.stringify(v));
+    } catch(e) { console.warn("Error de conexión, guardado local exitoso."); }
   }
 }
 
@@ -521,37 +529,42 @@ function getRealResults(){ return load("real") || {matches:{},winners:{},groups:
 // ================================================================
 // SUPABASE — Sincronización en vivo
 // ================================================================
-async function sbFetch(){
-  if(!USE_SUPABASE) return null;
-  try{
+async function syncDatabase() {
+  if(!USE_SUPABASE) return;
+  try {
     const r = await fetch(`${SUPABASE_URL}/rest/v1/mundial_data?select=*`,{
       headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":`Bearer ${SUPABASE_ANON_KEY}`}
     });
-    return await r.json();
-  }catch(e){return null;}
-}
-
-// Refresca la base de datos constantemente (Magia multijugador)
-async function syncDatabase() {
-  if(USE_SUPABASE) {
-    const data = await sbFetch();
-    if(data) {
-      data.forEach(row => { dbState[row.id] = row.data; });
-      // Si estamos viendo el ranking, lo redibuja al instante
-      if(document.getElementById("page-ranking").classList.contains("active")) {
-         renderRanking();
+    
+    if(r.ok) {
+      const data = await r.json();
+      if(Array.isArray(data)) {
+        let updated = false;
+        data.forEach(row => {
+          // Solo actualizar si la nube tiene datos diferentes a los locales
+          const localStr = JSON.stringify(dbState[row.id]);
+          const remoteStr = JSON.stringify(row.data);
+          if(localStr !== remoteStr) {
+             dbState[row.id] = row.data;
+             localStorage.setItem(row.id, remoteStr);
+             updated = true;
+          }
+        });
+        
+        // Refrescar la pantalla de Ranking SOLO si hubo un cambio real
+        if(updated && document.getElementById("page-ranking").classList.contains("active")) {
+           renderRanking();
+        }
       }
+    } else {
+       console.error("Supabase bloqueó la conexión.");
     }
-  } else {
-    Object.keys(localStorage).forEach(k => {
-      if(k.startsWith(PREFIX)) dbState[k] = JSON.parse(localStorage.getItem(k));
-    });
-  }
+  } catch(e) {}
 }
 
-// Carga inicial y auto-refresco cada 3 segundos
-syncDatabase();
+// Bucle de conexión (revisa el servidor cada 3 segundos)
 if(USE_SUPABASE) {
+  syncDatabase();
   setInterval(syncDatabase, 3000);
 }
 
