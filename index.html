@@ -969,16 +969,21 @@ function renderML(type,roundFilter,containerId){
       const selDraw = sel==="draw" ? " active-draw" : "";
       const selAway = sel==="away" ? " active-away" : "";
 
-      // Inputs: visibles solo si ya hay una selección activa Y está abierto
+      // Inputs: siempre los creamos, pero los ocultamos hasta que se haga clic
       const showInputs = isOpen && sel;
-      const inputsHtml = showInputs ? `
-        <div class="score-inputs" style="margin-top:8px">
-          <input type="number" id="s_${m.id}_h" class="score-input" value="${p.h}" min="0" max="20" placeholder="0">
-          <span style="color:var(--muted);font-weight:700;font-size:20px">-</span>
-          <input type="number" id="s_${m.id}_a" class="score-input" value="${p.a}" min="0" max="20" placeholder="0">
+      const inputsHtml = isOpen ? `
+        <div id="hint_${m.id}" style="font-size:11px;color:var(--muted);margin-top:8px; display:${showInputs ? 'none' : 'block'}">
+          ↑ Selecciona un ganador para ingresar el marcador
         </div>
-        <button class="btn btn-sm btn-outline" style="margin-top:8px;width:100%" onclick="validateAndSave('${m.id}')">Guardar predicción</button>
-      ` : (isOpen && !sel ? `<div style="font-size:11px;color:var(--muted);margin-top:8px">↑ Selecciona un ganador para ingresar el marcador</div>` : "");
+        <div id="inp_${m.id}" style="display:${showInputs ? 'block' : 'none'}">
+          <div class="score-inputs" style="margin-top:8px">
+            <input type="number" id="s_${m.id}_h" class="score-input" value="${p.h}" min="0" max="20" placeholder="0">
+            <span style="color:var(--muted);font-weight:700;font-size:20px">-</span>
+            <input type="number" id="s_${m.id}_a" class="score-input" value="${p.a}" min="0" max="20" placeholder="0">
+          </div>
+          <button class="btn btn-sm btn-outline" style="margin-top:8px;width:100%" onclick="validateAndSave('${m.id}')">Guardar predicción</button>
+        </div>
+      ` : "";
 
       // Si hay predicción guardada y está abierto, mostrarla debajo de los botones
       const savedHint = (p.h!=="" && isOpen) ? `<div style="font-size:11px;color:var(--muted);margin-top:4px">Guardado: ${p.h}-${p.a}</div>` : "";
