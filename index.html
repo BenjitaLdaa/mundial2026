@@ -206,19 +206,21 @@
 <body>
 
 <!-- NAV — sin circulito, solo texto -->
-<nav>
-<div class="nav-brand" style="padding: 5px 0; margin-right: 20px;">
-    <img src="mundial.jpg" alt="Mundial 2026" style="height: 40px; border-radius: 4px; object-fit: contain;">
+<nav style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: var(--bg2);">
+  <!-- Logo a la izquierda -->
+  <div class="nav-brand">
+    <img src="2026.png" alt="Logo" style="height: 40px; object-fit: contain;">
   </div>
-  <!-- Nueva pestaña REGLAMENTO a la izquierda de todo -->
-  <div class="nav-tab" onclick="goTab('reglamento')">Reglamento</div>
-  <div class="nav-tab active" onclick="goTab('ranking')">Ranking</div>
-  <div class="nav-tab" onclick="goTab('pronostico')">Mi Pronóstico</div>
-  <div class="nav-tab" onclick="goTab('grupos')">Clasificados de Grupo</div>
-  <div class="nav-tab" onclick="goTab('partidos')">Partidos</div>
-  <div class="nav-tab" onclick="goTab('eliminatorias')">Fase Eliminatoria</div>
-  <div id="admin-tab" class="nav-tab hidden" onclick="goTab('admin')">Admin ⚙️</div>
-  <div class="nav-user" id="nav-user-info"></div>
+  
+  <!-- Enlaces a la derecha -->
+  <div style="display: flex; gap: 15px;">
+    <div class="nav-tab" onclick="goTab('reglamento')">Reglamento</div>
+    <div class="nav-tab active" onclick="goTab('ranking')">Ranking</div>
+    <div class="nav-tab" onclick="goTab('pronostico')">Pronóstico</div>
+    <div class="nav-tab" onclick="goTab('grupos')">Clasificados</div>
+    <div class="nav-tab" onclick="goTab('partidos')">Partidos</div>
+    <div id="admin-tab" class="nav-tab hidden" onclick="goTab('admin')">Admin</div>
+  </div>
 </nav>
 
 <!-- ===== LOGIN CON VIDEO LOOP INFINITO ===== -->
@@ -227,14 +229,9 @@
     <source src="Mundial26.mp4" type="video/mp4">
   </video>
   <div class="login-overlay"></div>
-  <div class="login-box">
-    <!-- Sin circulito, solo texto con gradiente -->
-    <!-- Logo central FIFA -->
-    <div style="text-align:center; margin-bottom:36px;">
-      <img src="2026.png" alt="FIFA World Cup 2026" style="max-width: 280px; width: 100%; height: auto; filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.6));">
-    </div>
+  <div class="login-box" style="background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px); padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); max-width: 320px; width: 90%;">
     <div id="form-login">
-      <div class="input-group"><label>Usuario</label><input type="text" id="login-user" placeholder="tu usuario" autocomplete="username"></div>
+      <div class="input-group"><label>Usuario</label><input type="text" id="login-user" placeholder="usuario" autocomplete="username"></div>
       <div class="input-group"><label>Contraseña</label><input type="password" id="login-pass" placeholder="••••••" autocomplete="current-password"></div>
       <div id="login-error" class="alert alert-red hidden"></div>
       <button class="btn" onclick="doLogin()">Entrar</button>
@@ -248,7 +245,6 @@
       <button class="btn" onclick="doRegister()">Crear cuenta</button>
       <div style="text-align:center;margin-top:12px;font-size:13px"><a style="color:#93c5fd;cursor:pointer" onclick="toggleForm()">Ya tengo cuenta</a></div>
     </div>
-  </div>
 </div>
 
 <!-- MAIN PAGES -->
