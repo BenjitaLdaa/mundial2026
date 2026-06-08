@@ -256,45 +256,26 @@
 
 <div id="main-pages" class="hidden">
 
-<div id="page-reglamento" class="page max-w-680">
-  <div class="section-title">REGLAMENTO</div>
-  <div class="section-sub">Todo lo que necesitas saber para jugar</div>
-  <div class="reglamento-card" style="padding:0;overflow:hidden">
+<div class="section-title">REGLAMENTO</div>
+<div class="section-sub">Todo lo que necesitas saber para jugar</div>
 
-    <div style="padding:0 20px">
-      <div class="reglamento-item">
-        <div class="reglamento-icon ri-red">🏆</div>
-        <div>
-          <div class="reglamento-title">Mi Pronóstico Final</div>
-          <div class="reglamento-desc">Elige quién será campeón, subcampeón y tercer lugar del Mundial. Disponible hasta <span class="pts-r">24 horas antes</span> del primer partido. Una vez guardado, <strong>no se puede modificar</strong>. Puntos: <span class="pts-g">10</span> campeón · <span class="pts-o">5</span> subcampeón · <span class="pts-o">3</span> tercer lugar.</div>
-        </div>
-      </div>
-      <div class="reglamento-item">
-        <div class="reglamento-icon ri-blue">⚽</div>
-        <div>
-          <div class="reglamento-title">Partidos — Fase de Grupos</div>
-          <div class="reglamento-desc">Puedes ingresar y modificar tu predicción desde que se habilita (<span class="pts-g">24h antes</span>) hasta el cierre (<span class="pts-r">1h antes</span> del pitazo). Usa los botones de equipo o empate para orientar tu predicción. Puntos:<br>
-          • Resultado exacto (ej: 2-2 y sale 2-2): <span class="pts-g">+8 pts</span> (5+3)<br>
-          • Tipo correcto sin marcador exacto (ej: 0-0 y sale 1-1): <span class="pts-o">+3 pts</span><br>
-          • Ganador correcto sin marcador exacto: <span class="pts-o">+3 pts</span><br>
-          • Sin acierto: 0 pts</div>
-        </div>
-      </div>
-      <div class="reglamento-item">
-        <div class="reglamento-icon ri-blue">🏟️</div>
-        <div>
-          <div class="reglamento-title">Fase Eliminatoria</div>
-          <div class="reglamento-desc">Mismo sistema que la fase de grupos. Los partidos se habilitan <span class="pts-g">24h antes</span> y cierran <span class="pts-r">1h antes</span> del partido. Resultado exacto: <span class="pts-g">+5 pts</span>. Ganador correcto: <span class="pts-o">+3 pts</span>. En eliminatorias no aplica empate como resultado final.</div>
-        </div>
-      </div>
-      <div class="reglamento-item">
-        <div class="reglamento-icon ri-green">📊</div>
-        <div>
-          <div class="reglamento-title">Clasificados por Grupo</div>
-          <div class="reglamento-desc">Predice el 1° y 2° lugar de cada uno de los 12 grupos, más exactamente 8 mejores terceros que avanzan a 16avos. Disponible hasta <span style="color:var(--wc-red);font-weight:600">24 horas antes</span> del Mundial. Posición exacta: <span class="pts-g">+10 pts</span>. Clasificado en distinta posición: <span class="pts-o">+3 pts</span>.</div>
-        </div>
-      </div>
-    </div>
+<!-- 1. BLOQUE REGLAS GENERALES (AHORA VA ARRIBA) -->
+<div class="reglamento-card" style="margin-bottom: 20px;">
+  <div style="font-size: 16px; font-weight: bold; color: var(--wc-gold); margin-bottom: 15px;">REGLAS GENERALES</div>
+  <div id="contenedor-reglas-generales">
+    <!-- Aquí pega los items de "Bloqueo automático", "Multijugador...", "¿Quién gana?", "Fechas clave" -->
+    <!-- (Es el bloque que actualmente tienes abajo) -->
+  </div>
+</div>
+
+<!-- 2. BLOQUE SISTEMA DE PRONÓSTICOS (AHORA VA ABAJO) -->
+<div class="reglamento-card">
+  <div style="font-size: 16px; font-weight: bold; color: var(--wc-gold); margin-bottom: 15px;">SISTEMA DE PRONÓSTICOS</div>
+  <div id="contenedor-sistema-puntos">
+    <!-- Aquí pega los items de "Mi Pronóstico Final", "Partidos - Fase de Grupos", etc -->
+    <!-- (Es el bloque que actualmente tienes arriba) -->
+  </div>
+</div>
 
     <div style="background:var(--bg3);padding:14px 20px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-top:8px">
       <div style="font-family:var(--font-display);font-size:16px;color:var(--wc-gold);letter-spacing:1px">REGLAS GENERALES</div>
@@ -354,18 +335,7 @@
       <div class="pt-card"><div class="pt-val">3</div><div class="pt-label">Clasificado (posición distinta)</div></div>
     </div>
   </div>
-
-  <div class="card" style="background:var(--bg2);margin-top:12px">
-    <div class="card-title">NOTA SOBRE EMPATES</div>
-    <div style="font-size:12px;color:var(--muted);line-height:1.7">
-      Sistema de puntos por partido:<br>
-      • Resultado exacto (ej: predices 2-2 y sale 2-2): <span class="pts-g">+8 pts</span> (exacto +5 + tipo correcto +3)<br>
-      • Tipo correcto sin marcador exacto (ej: 0-0 y sale 1-1, o predices México gana y gana): <span class="pts-o">+3 pts</span><br>
-      • Sin acierto: 0 pts
-    </div>
-  </div>
-</div>
-
+  
 <div id="page-pronostico" class="page max-w-680">
   <div class="section-title">MI PRONÓSTICO FINAL</div>
   <div class="section-sub">Solo aparecen los 48 equipos clasificados oficiales.</div>
