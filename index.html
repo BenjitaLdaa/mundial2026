@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -132,7 +132,7 @@
 
   /* ===== MATCH CARD con tablita de puntos a la izquierda ===== */
   .match-outer { display: flex; gap: 10px; align-items: stretch; margin-bottom: 12px; }
-  /* tablita de puntos izquierda */
+  /* tablita de puntos izquierda (MODIFICADA PARA SER SIEMPRE VERDE) */
   .pts-side-box { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 62px; padding: 10px 8px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg3); text-align: center; flex-shrink: 0; gap: 4px; }
   .pts-side-box.exacto, .pts-side-box.ganador, .pts-side-box.cero { border-color: rgba(0,132,61,.4); background: rgba(0,132,61,.1); }
   .pts-side-box.pending { border-color: var(--border); background: var(--bg3); }
@@ -141,6 +141,7 @@
   .pts-side-icon { font-size: 16px; line-height: 1; }
   .exacto .pts-side-num, .ganador .pts-side-num, .cero .pts-side-num { color: #4ade80; }
   .pending .pts-side-num { color: var(--muted); }
+  
   /* la tarjeta de partido propiamente */
   .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; flex: 1; overflow: hidden; }
   .match-card.historical { border-color: rgba(240,171,0,.35); }
@@ -190,11 +191,12 @@
   .api-dot.idle    { background: var(--muted); }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-  /* ===== SELECTOR DE RESULTADO (ganador/empate) ===== */
+  /* ===== SELECTOR DE RESULTADO (ganador/empate) (MODIFICADO A AZUL) ===== */
   .result-selector { display: flex; gap: 6px; margin-bottom: 10px; }
   .rs-btn { flex: 1; padding: 8px 4px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg3); color: var(--muted); font-size: 12px; font-weight: 500; cursor: pointer; text-align: center; transition: all .15s; font-family: var(--font-body); }
   .rs-btn:hover { border-color: var(--wc-blue); color: var(--text); }
   .rs-btn.active-home, .rs-btn.active-draw, .rs-btn.active-away { background: rgba(0,61,165,.15); border-color: var(--wc-blue); color: #93c5fd; font-weight: 700; }
+  
   /* score inputs validación visual */
   .score-input.invalid { border-color: var(--wc-red) !important; }
 
@@ -205,37 +207,42 @@
 </head>
 <body>
 
-<!-- NAV — sin circulito, solo texto -->
-<nav style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: transparent;">
-  <div class="nav-brand">
-    <img src="logo.png" alt="Logo" style="height: 60px; width: auto; object-fit: contain;">
+<nav>
+  <div class="nav-brand" style="padding: 8px 0; margin-right: 24px;">
+    <img src="logo.jpg" alt="Mundial 2026" style="height: 38px; border-radius: 6px; object-fit: cover;">
   </div>
-  
-  <div style="display: flex; gap: 15px; align-items: center;">
-    <div class="nav-tab" onclick="goTab('reglamento')">Reglamento</div>
-    <div class="nav-tab active" onclick="goTab('ranking')">Ranking</div>
-    <div class="nav-tab" onclick="goTab('pronostico')">Pronóstico</div>
-    <div class="nav-tab" onclick="goTab('grupos')">Clasificados</div>
-    <div class="nav-tab" onclick="goTab('partidos')">Partidos</div>
-    <div id="admin-tab" class="nav-tab hidden" onclick="goTab('admin')">Admin</div>
-  </div>
+  <div class="nav-tab" onclick="goTab('reglamento')">Reglamento</div>
+  <div class="nav-tab active" onclick="goTab('ranking')">Ranking</div>
+  <div class="nav-tab" onclick="goTab('pronostico')">Mi Pronóstico</div>
+  <div class="nav-tab" onclick="goTab('grupos')">Clasificados de Grupo</div>
+  <div class="nav-tab" onclick="goTab('partidos')">Partidos</div>
+  <div class="nav-tab" onclick="goTab('eliminatorias')">Fase Eliminatoria</div>
+  <div id="admin-tab" class="nav-tab hidden" onclick="goTab('admin')">Admin ⚙️</div>
+  <div class="nav-user" id="nav-user-info"></div>
 </nav>
 
-<!-- ===== LOGIN CON VIDEO LOOP INFINITO ===== -->
 <div id="page-login">
   <video id="login-video" autoplay muted loop playsinline preload="auto">
-    <source src="Mundial26.mp4" type="video/mp4">
+    <source src="MUNDIAL2026.mp4" type="video/mp4">
   </video>
   <div class="login-overlay"></div>
- <div class="login-box" style="max-width: 320px; width: 90%; margin: 0 auto;">
+  <div class="login-box">
+    <div style="text-align:center;margin-bottom:36px">
+      <div style="font-family:var(--font-display);font-size:62px;letter-spacing:3px;line-height:.9">
+        <span style="color:#ffffff">MUNDIAL </span>
+      </div>
+      <div style="font-family:var(--font-display);font-size:62px;letter-spacing:3px;line-height:.9">
+        <span style="color:var(--wc-blue)">20</span><span style="color:var(--wc-red)">26</span>
+      </div>
+      <div style="font-size:10px;letter-spacing:4px;color:rgba(220,232,255,.55);margin-top:12px;text-transform:uppercase">United States · Canada · México</div>
+    </div>
     <div id="form-login">
-      <div class="input-group"><label>Usuario</label><input type="text" id="login-user" placeholder="usuario" autocomplete="username"></div>
+      <div class="input-group"><label>Usuario</label><input type="text" id="login-user" placeholder="tu_nombre" autocomplete="username"></div>
       <div class="input-group"><label>Contraseña</label><input type="password" id="login-pass" placeholder="••••••" autocomplete="current-password"></div>
       <div id="login-error" class="alert alert-red hidden"></div>
       <button class="btn" onclick="doLogin()">Entrar</button>
       <div style="text-align:center;margin-top:12px;font-size:13px"><a style="color:#93c5fd;cursor:pointer" onclick="toggleForm()">Regístrate aquí</a></div>
     </div>
-    
     <div id="form-register" class="hidden">
       <div class="input-group"><label>Nombre para mostrar</label><input type="text" id="reg-name" placeholder="Tu nombre"></div>
       <div class="input-group"><label>Usuario</label><input type="text" id="reg-user" placeholder="sin_espacios"></div>
@@ -244,12 +251,11 @@
       <button class="btn" onclick="doRegister()">Crear cuenta</button>
       <div style="text-align:center;margin-top:12px;font-size:13px"><a style="color:#93c5fd;cursor:pointer" onclick="toggleForm()">Ya tengo cuenta</a></div>
     </div>
+  </div>
 </div>
 
-<!-- MAIN PAGES -->
 <div id="main-pages" class="hidden">
 
-<!-- ===== REGLAMENTO (nueva sección independiente) ===== -->
 <div id="page-reglamento" class="page max-w-680">
   <div class="section-title">REGLAMENTO</div>
   <div class="section-sub">Todo lo que necesitas saber para jugar</div>
@@ -331,16 +337,13 @@
   </div>
 </div>
 
-<!-- ===== RANKING — ranking izq + puntos der ===== -->
 <div id="page-ranking" class="page active max-w-680">
   <div class="section-title">RANKING</div>
   <div class="section-sub">Puntuación en tiempo real · Se actualiza automáticamente</div>
   <div id="api-status" class="api-bar hidden"><div class="api-dot idle" id="api-dot"></div><span id="api-msg">Comprobando API...</span></div>
 
-  <!-- Ranking primero -->
   <div id="ranking-list" style="margin-bottom:24px"></div>
 
-  <!-- Sistema de puntos abajo -->
   <div class="card" style="background:var(--bg2)">
     <div class="card-title">SISTEMA DE PUNTOS</div>
     <div class="points-grid">
@@ -363,7 +366,6 @@
   </div>
 </div>
 
-<!-- PRONÓSTICO -->
 <div id="page-pronostico" class="page max-w-680">
   <div class="section-title">MI PRONÓSTICO FINAL</div>
   <div class="section-sub">Solo aparecen los 48 equipos clasificados oficiales.</div>
@@ -372,7 +374,6 @@
     <div class="card" id="pron-locked-content"></div>
   </div>
   <div id="pron-form">
-    <!-- Alerta en rojo -->
     <div class="alert alert-red">⚠️ Al guardar no podrás modificarlo. Elige con cuidado.</div>
     <div class="card">
       <div style="font-size:11px;color:var(--muted);margin:12px 0 6px">🥇 CAMPEÓN (10 PTS)</div>
@@ -386,7 +387,6 @@
   </div>
 </div>
 
-<!-- GRUPOS split -->
 <div id="page-grupos" class="page">
   <div class="section-title">CLASIFICADOS POR GRUPO</div>
   <div class="section-sub">Disponible hasta <strong style="color:var(--wc-red)">24 horas antes</strong> del Mundial. Toca de nuevo un equipo para desmarcarlo.</div>
@@ -413,8 +413,6 @@
   </div>
 </div>
 
-
-<!-- PARTIDOS — split con tablita de puntos a la izquierda de cada partido -->
 <div id="page-partidos" class="page">
   <div class="section-title">FASE DE GRUPOS</div>
   <div class="section-sub">Se habilitan <strong style="color:var(--wc-red)">24 horas antes</strong> · Cierre <strong style="color:var(--wc-red)">1 hora antes</strong> del partido. Puedes editar hasta el cierre.</div>
@@ -436,7 +434,6 @@
   </div>
 </div>
 
-<!-- ELIMINATORIAS — split con tablita de puntos -->
 <div id="page-eliminatorias" class="page">
   <div class="section-title">FASE ELIMINATORIA</div>
   <div class="section-sub">Se habilitan <strong style="color:var(--wc-red)">24 horas antes</strong> · Cierre <strong style="color:var(--wc-red)">1 hora antes</strong> del partido.</div>
@@ -454,7 +451,6 @@
   </div>
 </div>
 
-<!-- ADMIN -->
 <div id="page-admin" class="page max-w-680">
   <div class="section-title">PANEL ADMIN</div>
   <div class="alert alert-gold" style="font-size:13px">💡 Con la API conectada los resultados se cargan solos. Este panel es para correcciones manuales.</div>
@@ -487,7 +483,6 @@
     </div>
   </div>
 
-  <!-- MODO DEMO -->
   <div class="card" style="border-color:rgba(240,171,0,.3)">
     <div class="card-title" style="color:var(--wc-gold)">🎮 MODO DEMO / PREVISUALIZACIÓN</div>
     <div style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6">
@@ -502,16 +497,19 @@
   </div>
 </div>
 
-</div><!-- /main-pages -->
-
-<script>
+</div><script>
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "mundial2026";
 const SUPABASE_URL      = "https://euajvjbwyjhskbjhgwvn.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1YWp2amJ3eWpoc2tiamhnd3ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwODE5MDcsImV4cCI6MjA5NTY1NzkwN30.ea0EAHnI8DeuUc2p5_Byq6c1lk-9zV9SnmtFCew99KI";
 const USE_SUPABASE      = true;
-const API_FOOTBALL_KEY  = "TU_API_KEY_AQUI";
-const USE_API           = false;
+
+// ============================================================
+// ¡¡PEGA AQUÍ TU CLAVE MAESTRA DE API-SPORTS!!
+// ============================================================
+const API_FOOTBALL_KEY  = "TU_API_KEY_AQUI"; 
+const USE_API           = true;
+
 const REFRESH_INTERVAL  = 120000;
 
 // Fechas
@@ -530,8 +528,7 @@ function timeLeft(){
 const PREFIX = "wc26_v4_";
 
 // ============================================================
-// MODO DEMO — fuerza apertura de partidos para previsualizar
-// Activar desde Admin > "Modo Demo"
+// MODO DEMO
 // ============================================================
 let TEST_MODE = false;
 
@@ -662,15 +659,13 @@ function goTabDirect(tab){
   if(tab==="admin"&&currentUser.isAdmin)      renderAdmin();
 }
 
-// PUNTOS — lógica corregida para empates
+// PUNTOS
 function matchPts(ph, pa, rh, ra){
   const exacto = ph===rh && pa===ra;
   const tipoR = rh===ra?"empate":rh>ra?"local":"visita";
   const tipoP = ph===pa?"empate":ph>pa?"local":"visita";
   const tipoOk = tipoR===tipoP;
-  // Exacto + tipo correcto = 5+3 = 8 pts
   if(exacto && tipoOk) return {pts:8, tipo:"exacto"};
-  // Solo tipo correcto (empate con diferente marcador, o ganador correcto)
   if(tipoOk) return {pts:3, tipo:"ganador"};
   return {pts:0, tipo:"cero"};
 }
@@ -718,7 +713,6 @@ function renderRanking(){
     const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":`<span style="color:var(--muted)">${i+1}</span>`;
     const isMe=u.id===currentUser.id;
     let diff="";
-    // Sin texto diferencial (no mostrar -0 pts del líder)
     return `<div class="rank-row ${isMe?"is-me":""}">
       <div class="rank-num">${medal}</div>
       <div style="flex:1"><div style="font-weight:500;font-size:15px">${u.name}${isMe?`<span class="me-badge">TÚ</span>`:""}</div>${diff}</div>
@@ -783,9 +777,8 @@ function setGR(r,el){currentGroupRound=r;document.querySelectorAll("#round-tabs-
 function setKR(r,el){currentKnockoutRound=r;document.querySelectorAll("#round-tabs-knockouts .group-tab").forEach(t=>t.classList.remove("active"));if(el)el.classList.add("active");renderML("knockout",r,"matches-list-knockouts");renderMR("knockout",r,"real-matches-knockouts");}
 
 // ============================================================
-// SELECTOR DE RESULTADO — ganador local / empate / ganador visita
+// SELECTOR DE RESULTADO (MODIFICADO PARA DESPLIEGUE)
 // ============================================================
-// Estado de selección por partido: {matchId: "home"|"draw"|"away"}
 const resultSel = {};
 
 function selectResult(matchId, choice, homeId, awayId){
@@ -797,15 +790,18 @@ function selectResult(matchId, choice, homeId, awayId){
   if(bH) bH.className="rs-btn"+(choice==="home"?" active-home":"");
   if(bD) bD.className="rs-btn"+(choice==="draw"?" active-draw":"");
   if(bA) bA.className="rs-btn"+(choice==="away"?" active-away":"");
+  
   // Mostrar inputs AL TIRO sin re-renderizar
   const inpBox = document.getElementById(`inp_${matchId}`);
   const hintEl = document.getElementById(`hint_${matchId}`);
   if(inpBox){ inpBox.style.display = "block"; }
   if(hintEl){ hintEl.style.display = "none"; }
+  
   const ih = document.getElementById(`s_${matchId}_h`);
   const ia = document.getElementById(`s_${matchId}_a`);
   if(!ih||!ia) return;
   ih.classList.remove("invalid"); ia.classList.remove("invalid");
+  
   if(choice==="home"){
     const h=parseInt(ih.value)||0, a=parseInt(ia.value)||0;
     if(h<=a){ ih.value=String(a+1); }
@@ -840,13 +836,6 @@ function enforceResult(matchId){
   if(choice==="away" && a<=h){ ia.classList.add("invalid"); }
 }
 
-function validateDraw(matchId){
-  const ih=document.getElementById(`s_${matchId}_h`);
-  const ia=document.getElementById(`s_${matchId}_a`);
-  if(!ih||!ia)return;
-  ia.value=ih.value; // mantener iguales
-}
-
 function validateAndSave(matchId){
   const choice = resultSel[matchId];
   const hEl = document.getElementById(`s_${matchId}_h`);
@@ -859,27 +848,24 @@ function validateAndSave(matchId){
   if(!choice){ alert("⚠️ Selecciona primero quién gana o si es empate"); return; }
   if(choice==="home" && h<=a){
     hEl.classList.add("invalid");
-    alert(`⚠️ Seleccionaste que gana el local, pero ${h}-${a} no lo refleja.
-El local debe tener más goles (ej: ${a+1}-${a}).`);
+    alert(`⚠️ Seleccionaste que gana el local, pero ${h}-${a} no lo refleja.\nEl local debe tener más goles (ej: ${a+1}-${a}).`);
     return;
   }
   if(choice==="away" && a<=h){
     aEl.classList.add("invalid");
-    alert(`⚠️ Seleccionaste que gana el visitante, pero ${h}-${a} no lo refleja.
-El visitante debe tener más goles (ej: ${h}-${h+1}).`);
+    alert(`⚠️ Seleccionaste que gana el visitante, pero ${h}-${a} no lo refleja.\nEl visitante debe tener más goles (ej: ${h}-${h+1}).`);
     return;
   }
   if(choice==="draw" && h!==a){
     hEl.classList.add("invalid"); aEl.classList.add("invalid");
-    alert(`⚠️ Seleccionaste empate, pero ${h}-${a} no es empate.
-Ambos deben ser iguales (ej: ${h}-${h}).`);
+    alert(`⚠️ Seleccionaste empate, pero ${h}-${a} no es empate.\nAmbos deben ser iguales (ej: ${h}-${h}).`);
     return;
   }
   hEl.classList.remove("invalid"); aEl.classList.remove("invalid");
   saveMatch(matchId);
 }
 
-// Columna izquierda — con tablita de puntos a la IZQUIERDA de la tarjeta
+// Columna izquierda — Renderizado con Javascript Reparado
 function renderML(type,roundFilter,containerId){
   const real=getRealResults();const myPreds=load("match_preds")?.[currentUser.id]||{};
   const matches=MATCHES.filter(m=>m.type===type&&m.round===roundFilter);
@@ -890,7 +876,6 @@ function renderML(type,roundFilter,containerId){
     const opensAt  = new Date(kickoff.getTime()-24*60*60*1000);
     const closesAt = new Date(kickoff.getTime()-60*60*1000);
     const hasResult  = !!real.matches[m.id];
-    // TEST_MODE fuerza isOpen en todos los partidos sin resultado oficial
     const isOpen     = !hasResult && (TEST_MODE || (now>=opensAt && now<=closesAt));
     const isClosed   = !hasResult && !TEST_MODE && now>closesAt;
     const isPending  = !hasResult && !TEST_MODE && now<opensAt;
@@ -901,7 +886,6 @@ function renderML(type,roundFilter,containerId){
     else if(isClosed) badge = `<span class="badge badge-red">Bloqueado</span>`;
 
     const p = myPreds[m.id]||{h:"",a:""};
-    // Pre-seleccionar tipo según predicción guardada
     if(p.h!=="" && !resultSel[m.id]){
       const ph=parseInt(p.h),pa=parseInt(p.a);
       if(ph>pa) resultSel[m.id]="home";
@@ -910,7 +894,6 @@ function renderML(type,roundFilter,containerId){
     }
     const sel = resultSel[m.id];
 
-    // Tablita de puntos lateral
     let sideClass="pending", sidePts="—", sideIcon="⏳", sideLbl="Pts\nobtenidos";
     if(hasResult){
       if(p.h!==""){
@@ -928,34 +911,27 @@ function renderML(type,roundFilter,containerId){
       <div class="pts-side-lbl">${sideLbl}</div>
     </div>`;
 
-    // Nombres cortos para los botones
     const homeLbl = (m.home.name||"Local").split(" ").slice(0,2).join(" ");
     const awayLbl = (m.away.name||"Visita").split(" ").slice(0,2).join(" ");
 
-    // ─── ZONA CENTRAL DEL PARTIDO ───────────────────────────────────────
     let centerHTML = "";
 
     if(hasResult){
-      // Resultado oficial cargado → mostrar predicción + puntos
       centerHTML = `<div class="match-locked">
         <span class="score-display">${p.h!==""?p.h:"?"} - ${p.a!==""?p.a:"?"}</span>
       </div>`;
     } else if(isClosed){
-      // Cerrado después del partido → mostrar predicción fija
       centerHTML = `<div class="match-locked">
         <span class="score-display" style="color:var(--muted)">${p.h!==""?p.h:"?"} - ${p.a!==""?p.a:"?"}</span>
         <div style="font-size:11px;color:var(--muted);margin-top:4px">🔒 Cerrado</div>
       </div>`;
     } else {
-      // Pendiente (>24h antes) O abierto → siempre mostrar los 3 botones
-      // pero deshabilitados si está pendiente
       const dis = isPending ? "disabled" : "";
       const disStyle = isPending ? "opacity:.45;cursor:not-allowed;pointer-events:none" : "";
       const selHome = sel==="home" ? " active-home" : "";
       const selDraw = sel==="draw" ? " active-draw" : "";
       const selAway = sel==="away" ? " active-away" : "";
 
-      // Inputs: siempre los creamos, pero los ocultamos hasta que se haga clic
       const showInputs = isOpen && sel;
       const inputsHtml = isOpen ? `
         <div id="hint_${m.id}" style="font-size:11px;color:var(--muted);margin-top:8px; display:${showInputs ? 'none' : 'block'}">
@@ -971,7 +947,6 @@ function renderML(type,roundFilter,containerId){
         </div>
       ` : "";
 
-      // Si hay predicción guardada y está abierto, mostrarla debajo de los botones
       const savedHint = (p.h!=="" && isOpen) ? `<div style="font-size:11px;color:var(--muted);margin-top:4px">Guardado: ${p.h}-${p.a}</div>` : "";
 
       centerHTML = `
@@ -1025,7 +1000,6 @@ function renderStandings(groupRound){
   const g = groupRound.replace("Grupo ","");
   const teams = GROUPS[g];
   const real = getRealResults();
-  // Calcular tabla con resultados reales
   const stats = {};
   teams.forEach(t=>{ stats[t.id]={pj:0,g:0,e:0,p:0,gf:0,gc:0,pts:0}; });
   MATCHES.filter(m=>m.groupLetter===g && real.matches[m.id]).forEach(m=>{
@@ -1040,7 +1014,6 @@ function renderStandings(groupRound){
     else if(ra>rh){ stats[aId].g++; stats[aId].pts+=3; stats[hId].p++; }
     else { stats[hId].e++; stats[hId].pts+=1; stats[aId].e++; stats[aId].pts+=1; }
   });
-  // Ordenar: pts desc, luego dif goles, luego gf
   const sorted = [...teams].sort((a,b)=>{
     const sa=stats[a.id], sb=stats[b.id];
     if(sb.pts!==sa.pts) return sb.pts-sa.pts;
@@ -1232,7 +1205,6 @@ function toggleDemo(on){
     badge.className   = on ? "badge badge-gold" : "badge badge-gray";
     badge.style.background = on ? "rgba(240,171,0,.2)" : "";
   }
-  // Refrescar la vista de partidos si está activa
   const pPage = document.getElementById("page-partidos");
   const ePage = document.getElementById("page-eliminatorias");
   if(pPage&&pPage.classList.contains("active"))  renderPartidos();
