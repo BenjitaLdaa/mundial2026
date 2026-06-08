@@ -207,7 +207,9 @@
 
 <!-- NAV — sin circulito, solo texto -->
 <nav>
-  <div class="nav-brand"><span style="-webkit-text-fill-color:#fff;color:#fff">MUNDIAL </span><span style="-webkit-text-fill-color:var(--wc-blue);color:var(--wc-blue)">20</span><span style="-webkit-text-fill-color:var(--wc-red);color:var(--wc-red)">26</span></div>
+<div class="nav-brand" style="padding: 5px 0; margin-right: 20px;">
+    <img src="mundial.jpg" alt="Mundial 2026" style="height: 40px; border-radius: 4px; object-fit: contain;">
+  </div>
   <!-- Nueva pestaña REGLAMENTO a la izquierda de todo -->
   <div class="nav-tab" onclick="goTab('reglamento')">Reglamento</div>
   <div class="nav-tab active" onclick="goTab('ranking')">Ranking</div>
@@ -227,17 +229,12 @@
   <div class="login-overlay"></div>
   <div class="login-box">
     <!-- Sin circulito, solo texto con gradiente -->
-    <div style="text-align:center;margin-bottom:36px">
-      <div style="font-family:var(--font-display);font-size:62px;letter-spacing:3px;line-height:.9">
-        <span style="color:#ffffff">MUNDIAL </span>
-      </div>
-      <div style="font-family:var(--font-display);font-size:62px;letter-spacing:3px;line-height:.9">
-        <span style="color:var(--wc-blue)">20</span><span style="color:var(--wc-red)">26</span>
-      </div>
-      <div style="font-size:10px;letter-spacing:4px;color:rgba(220,232,255,.55);margin-top:12px;text-transform:uppercase">United States · Canada · México</div>
+    <!-- Logo central FIFA -->
+    <div style="text-align:center; margin-bottom:36px;">
+      <img src="2026.png" alt="FIFA World Cup 2026" style="max-width: 280px; width: 100%; height: auto; filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.6));">
     </div>
     <div id="form-login">
-      <div class="input-group"><label>Usuario</label><input type="text" id="login-user" placeholder="tu_nombre" autocomplete="username"></div>
+      <div class="input-group"><label>Usuario</label><input type="text" id="login-user" placeholder="tu usuario" autocomplete="username"></div>
       <div class="input-group"><label>Contraseña</label><input type="password" id="login-pass" placeholder="••••••" autocomplete="current-password"></div>
       <div id="login-error" class="alert alert-red hidden"></div>
       <button class="btn" onclick="doLogin()">Entrar</button>
