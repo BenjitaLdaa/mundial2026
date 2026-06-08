@@ -237,7 +237,7 @@
       <div style="font-size:10px;letter-spacing:4px;color:rgba(220,232,255,.55);margin-top:12px;text-transform:uppercase">United States · Canada · México</div>
     </div>
     <div id="form-login">
-      <div class="input-group"><label>Usuario</label><input type="text" id="login-user" placeholder="tu_nombre" autocomplete="username"></div>
+      <div class="input-group"><label>Usuario</label><input type="text" id="login-user" placeholder="Tu nombre de usuario" autocomplete="username"></div>
       <div class="input-group"><label>Contraseña</label><input type="password" id="login-pass" placeholder="••••••" autocomplete="current-password"></div>
       <div id="login-error" class="alert alert-red hidden"></div>
       <button class="btn" onclick="doLogin()">Entrar</button>
@@ -260,32 +260,25 @@
   <div class="section-title">REGLAMENTO</div>
   <div class="section-sub">Todo lo que necesitas saber para jugar</div>
 <div class="reglamento-card" style="padding:0;overflow:hidden">
-    
-    <div style="background:var(--bg3);padding:14px 20px;border-bottom:1px solid var(--border)">
-        <div style="font-family:var(--font-display);font-size:16px;color:var(--wc-gold);letter-spacing:1px">REGLAS GENERALES</div>
-    </div>
-    <div style="padding:0 20px">
-        <div class="reglamento-item">
-            <div class="reglamento-icon ri-gold">🔒</div>
-            <div><div class="reglamento-title">Bloqueo automático</div><div class="reglamento-desc">Cierre 24h antes del primer partido, partidos individuales 1h antes.</div></div>
-        </div>
-        <div class="reglamento-item">
-            <div class="reglamento-icon ri-blue">👥</div>
-            <div><div class="reglamento-title">Multijugador en tiempo real</div><div class="reglamento-desc">Ranking actualizado automáticamente en la nube.</div></div>
-        </div>
-    </div>
-
-    <div style="background:var(--bg3);padding:14px 20px;border-top:2px solid var(--border);border-bottom:1px solid var(--border);margin-top:10px">
-        <div style="font-family:var(--font-display);font-size:16px;color:var(--wc-gold);letter-spacing:1px">SISTEMA DE PRONÓSTICOS</div>
-    </div>
     <div style="padding:0 20px">
         <div class="reglamento-item">
             <div class="reglamento-icon ri-red">🏆</div>
-            <div><div class="reglamento-title">Mi Pronóstico Final</div><div class="reglamento-desc">Campeón (10 pts), Subcampeón (5 pts), 3° lugar (3 pts).</div></div>
+            <div>
+                <div class="reglamento-title">Mi Pronóstico Final</div>
+                <div class="reglamento-desc">Elige quién será campeón, subcampeón y tercer lugar del Mundial. Disponible hasta <span class="pts-r">24 horas antes</span> del primer partido. Una vez guardado, <strong>no se puede modificar</strong>. Puntos: <span class="pts-g">10</span> campeón · <span class="pts-o">5</span> subcampeón · <span class="pts-o">3</span> tercer lugar.</div>
+            </div>
         </div>
         <div class="reglamento-item">
             <div class="reglamento-icon ri-blue">⚽</div>
-            <div><div class="reglamento-title">Partidos — Fase de Grupos</div><div class="reglamento-desc">Exacto: 8 pts. Tipo de resultado: 3 pts.</div></div>
+            <div>
+                <div class="reglamento-title">Partidos — Fase de Grupos</div>
+                <div class="reglamento-desc">Puedes ingresar y modificar tu predicción desde que se habilita (<span class="pts-g">24h antes</span>) hasta el cierre (<span class="pts-r">1h antes</span> del pitazo). Usa los botones de equipo o empate para orientar tu predicción.
+                    <br>• Resultado exacto (ej: 2-2 y sale 2-2): <span class="pts-g">+8 pts</span> (5+3)<br>
+                    • Tipo correcto sin marcador exacto (ej: 0-0 y sale 1-1): <span class="pts-o">+3 pts</span><br>
+                    • Ganador correcto sin marcador exacto: <span class="pts-o">+3 pts</span><br>
+                    • Sin acierto: 0 pts
+                </div>
+            </div>
         </div>
     </div>
 </div>
