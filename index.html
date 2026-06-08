@@ -261,6 +261,48 @@
   <div class="section-sub">Todo lo que necesitas saber para jugar</div>
   <div class="reglamento-card" style="padding:0;overflow:hidden">
 
+ <div style="background:var(--bg3);padding:14px 20px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-top:8px">
+      <div style="font-family:var(--font-display);font-size:16px;color:var(--wc-gold);letter-spacing:1px">REGLAS GENERALES</div>
+    </div>
+
+    <div style="padding:0 20px">
+      <div class="reglamento-item">
+        <div class="reglamento-icon ri-gold">🔒</div>
+        <div>
+          <div class="reglamento-title">Bloqueo automático</div>
+          <div class="reglamento-desc">El Pronóstico Final y los Clasificados de Grupo se cierran automáticamente 24h antes del primer partido. Los partidos se cierran 1h antes del partido. Una vez cerrado, no hay excepciones.</div>
+        </div>
+      </div>
+      <div class="reglamento-item">
+        <div class="reglamento-icon ri-blue">👥</div>
+        <div>
+          <div class="reglamento-title">Multijugador en tiempo real</div>
+          <div class="reglamento-desc">Todos los participantes ven el ranking actualizado al finalizar cada partido.</div>
+        </div>
+      </div>
+      <div class="reglamento-item">
+        <div class="reglamento-icon ri-red">🥇</div>
+        <div>
+          <div class="reglamento-title">¿Como se definira el ganador?</div>
+          <div class="reglamento-desc">El jugador con más puntos acumulados al finalizar el torneo el <span class="fecha-key">19 Jul 2026</span> gana. En caso de empate, desempata quien tenga más resultados exactos de partido.</div>
+        </div>
+      </div>
+      <div class="reglamento-item">
+        <div class="reglamento-icon ri-gold">📅</div>
+        <div>
+          <div class="reglamento-title">Fechas clave</div>
+          <div class="reglamento-desc">
+            <span class="fecha-key">10 Jun · 15:00 hrs</span> — Cierre pronóstico final y clasificados<br>
+            <span class="fecha-key">11 Jun · 15:00 hrs</span> — Inicio del Mundial: México vs Sudáfrica<br>
+            <span class="fecha-key">19 Jul · 21:00 hrs</span> — Gran Final · MetLife Stadium, Nueva Jersey
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
     <div style="padding:0 20px">
       <div class="reglamento-item">
         <div class="reglamento-icon ri-red">🏆</div>
@@ -272,10 +314,13 @@
       <div class="reglamento-item">
         <div class="reglamento-icon ri-blue">⚽</div>
         <div>
+           <div class="reglamento-title">Clasificados por Grupo</div>
+          <div class="reglamento-desc">Predice el 1° y 2° lugar de cada uno de los 12 grupos, más exactamente 8 mejores terceros que avanzan a 16avos. Disponible hasta <span style="color:var(--wc-red);font-weight:600">24 horas antes</span> del Mundial. Posición exacta: <span class="pts-g">+10 pts</span>. Clasificado en distinta posición: <span class="pts-o">+3 pts</span>.</div>
+        </div>
           <div class="reglamento-title">Partidos — Fase de Grupos</div>
           <div class="reglamento-desc">Puedes ingresar y modificar tu predicción desde que se habilita (<span class="pts-g">24h antes</span>) hasta el cierre (<span class="pts-r">1h antes</span> del pitazo). Usa los botones de equipo o empate para orientar tu predicción. Puntos:<br>
           • Resultado exacto (ej: 2-2 y sale 2-2): <span class="pts-g">+8 pts</span> (5+3)<br>
-          • Tipo correcto sin marcador exacto (ej: 0-0 y sale 1-1): <span class="pts-o">+3 pts</span><br>
+          • Empate correcto sin marcador exacto (ej: 0-0 y sale 1-1): <span class="pts-o">+3 pts</span><br>
           • Ganador correcto sin marcador exacto: <span class="pts-o">+3 pts</span><br>
           • Sin acierto: 0 pts</div>
         </div>
@@ -295,47 +340,6 @@
         </div>
       </div>
     </div>
-
-    <div style="background:var(--bg3);padding:14px 20px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-top:8px">
-      <div style="font-family:var(--font-display);font-size:16px;color:var(--wc-gold);letter-spacing:1px">REGLAS GENERALES</div>
-    </div>
-
-    <div style="padding:0 20px">
-      <div class="reglamento-item">
-        <div class="reglamento-icon ri-gold">🔒</div>
-        <div>
-          <div class="reglamento-title">Bloqueo automático</div>
-          <div class="reglamento-desc">El Pronóstico Final y los Clasificados de Grupo se cierran automáticamente 24h antes del primer partido. Los partidos se cierran individualmente 1h antes de cada uno. Una vez cerrado, no hay excepciones.</div>
-        </div>
-      </div>
-      <div class="reglamento-item">
-        <div class="reglamento-icon ri-blue">👥</div>
-        <div>
-          <div class="reglamento-title">Multijugador en tiempo real</div>
-          <div class="reglamento-desc">Todos los participantes ven el ranking actualizado simultáneamente gracias a la base de datos en la nube (Supabase). Los resultados reales se sincronizan automáticamente.</div>
-        </div>
-      </div>
-      <div class="reglamento-item">
-        <div class="reglamento-icon ri-red">🥇</div>
-        <div>
-          <div class="reglamento-title">¿Quién gana la quiniela?</div>
-          <div class="reglamento-desc">El jugador con más puntos acumulados al finalizar el torneo el <span class="fecha-key">19 Jul 2026</span> gana. En caso de empate, desempata quien tenga más resultados exactos de partido.</div>
-        </div>
-      </div>
-      <div class="reglamento-item">
-        <div class="reglamento-icon ri-gold">📅</div>
-        <div>
-          <div class="reglamento-title">Fechas clave</div>
-          <div class="reglamento-desc">
-            <span class="fecha-key">10 Jun · 15:00 hrs</span> — Cierre pronóstico final y clasificados<br>
-            <span class="fecha-key">11 Jun · 15:00 hrs</span> — Inicio del Mundial: México vs Sudáfrica<br>
-            <span class="fecha-key">19 Jul · 21:00 hrs</span> — Gran Final · MetLife Stadium, Nueva Jersey
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <div id="page-ranking" class="page active max-w-680">
   <div class="section-title">RANKING</div>
