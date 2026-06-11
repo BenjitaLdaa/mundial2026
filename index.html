@@ -578,6 +578,31 @@ Object.keys(GROUPS).forEach((g,gIdx)=>{
   });
 });
 
+const fasesEliminatorias = [
+  {name:"16avos",count:16,start:new Date(2026,5,28)},
+  {name:"Octavos",count:8,start:new Date(2026,6,4)},
+  {name:"Cuartos",count:4,start:new Date(2026,6,9)},
+  {name:"Semifinales",count:2,start:new Date(2026,6,14)},
+  {name:"Final",count:1,start:new Date(2026,6,19)}
+];
+
+fasesEliminatorias.forEach(r=>{
+  for(let i=1;i<=r.count;i++){
+    let d=new Date(r.start); 
+    d.setDate(d.getDate()+Math.floor((i-1)/4));
+    
+    let ds = `${String(d.getDate()).padStart(2,'0')} ${meses[d.getMonth()]} 26`;
+    let hr = i%2===0?"20:00":"15:00";
+    
+    MATCHES.push({
+      id:"e"+(mId++), type:"knockout", round:r.name, date:`${ds} ${hr}`,
+      home:{id:`${r.name}_${i}_H`,name:`Clasificado ${i}A`,code:null}, 
+      away:{id:`${r.name}_${i}_A`,name:`Clasificado ${i}B`,code:null},
+      kickoff:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${hr}:00-04:00`
+    });
+  }
+});
+
 [{name:"16avos",count:16,start:new Date(2026,5,28)},{name:"Octavos",count:8,start:new Date(2026,6,4)},{name:"Cuartos",count:4,start:new Date(2026,6,9)},{name:"Semifinales",count:2,start:new Date(2026,6,14)},{name:"Final",count:1,start:new Date(2026,6,19)}]
 .forEach(r=>{
   for(let i=1;i<=r.count;i++){
