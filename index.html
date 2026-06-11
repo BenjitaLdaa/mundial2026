@@ -959,7 +959,7 @@ function validateAndSave(matchId){
 
 function renderML(type,roundFilter,containerId){
   const real=getRealResults();const myPreds=load("match_preds")?.[currentUser.id]||{};
-  const matches=MATCHES.filter(m=>m.type===type&&m.round===roundFilter);
+  const matches=MATCHES.filter(m=>m.type===type&&m.round===roundFilter).sort((a,b) => new Date(a.kickoff) - new Date(b.kickoff));
   const el=document.getElementById(containerId);if(!el)return;
   if(!matches.length){el.innerHTML=`<div style="color:var(--muted);font-size:13px;padding:16px">Sin partidos en esta ronda aún.</div>`;return}
   el.innerHTML=matches.map(m=>{
@@ -1073,7 +1073,7 @@ function renderML(type,roundFilter,containerId){
 }
 
 function renderMR(type,roundFilter,containerId){
-  const real=getRealResults();const matches=MATCHES.filter(m=>m.type===type&&m.round===roundFilter);
+  const matches=MATCHES.filter(m=>m.type===type&&m.round===roundFilter).sort((a,b) => new Date(a.kickoff) - new Date(b.kickoff));
   const el=document.getElementById(containerId);if(!el)return;
   const finished=matches.filter(m=>real.matches[m.id]);
   if(!finished.length){el.innerHTML=`<div class="no-results-hint">Los resultados aparecerán aquí automáticamente.</div>`;return}
@@ -1189,7 +1189,7 @@ function renderRealGroupResults(){
 }
 function setRGT(g,el){currentRealGroupTab=g;document.querySelectorAll("#real-group-tabs .group-tab").forEach(t=>t.classList.remove("active"));if(el)el.classList.add("active");renderRGP(g);}
 function renderRGP(g){
-  const real=getRealResults();const ms=MATCHES.filter(m=>m.groupLetter===g);const fin=ms.filter(m=>real.matches[m.id]);
+  const real=getRealResults();const ms=MATCHES.filter(m=>m.groupLetter===g).sort((a,b) => new Date(a.kickoff) - new Date(b.kickoff));
   const el=document.getElementById("real-group-results");if(!el)return;
   if(!fin.length){el.innerHTML=`<div class="no-results-hint">Sin resultados en el Grupo ${g} aún.</div>`;return}
   el.innerHTML=fin.map(m=>{const rs=real.matches[m.id];const rh=parseInt(rs.home),ra=parseInt(rs.away);const winner=rh>ra?m.home.name:ra>rh?m.away.name:"Empate";return `<div class="match-card-real"><div class="match-date"><span>${m.date}</span><span class="badge badge-gold">Oficial ✓</span></div><div class="match-body"><div class="match-team">${getFlagHtml(m.home.code)}<span class="tname">${m.home.name}</span></div><div style="flex:1.5;text-align:center"><div class="score-real">${rs.home} - ${rs.away}</div><div style="font-size:11px;color:var(--muted);margin-top:4px">${winner}</div></div><div class="match-team">${getFlagHtml(m.away.code)}<span class="tname">${m.away.name}</span></div></div></div>`;}).join("");
@@ -1259,7 +1259,7 @@ function resetMyData(){
 }
 function setAR(r,el){currentAdminRound=r;document.querySelectorAll("#admin-round-tabs .group-tab").forEach(t=>t.classList.remove("active"));if(el)el.classList.add("active");renderAM();}
 function renderAM(){
-  const real=getRealResults();const ms=MATCHES.filter(m=>m.round===currentAdminRound);
+  const real=getRealResults();const ms=MATCHES.filter(m=>m.round===currentAdminRound).sort((a,b) => new Date(a.kickoff) - new Date(b.kickoff));
   document.getElementById("admin-matches-list").innerHTML=ms.map(m=>`
     <div style="margin-bottom:10px;padding:12px;background:var(--bg3);border-radius:8px">
       <div style="font-size:13px;font-weight:500;margin-bottom:8px">${getFlagHtml(m.home.code)} ${m.home.name} vs ${getFlagHtml(m.away.code)} ${m.away.name} <span style="color:var(--muted);font-size:11px">${m.date}</span></div>
