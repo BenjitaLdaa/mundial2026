@@ -555,19 +555,46 @@ const GROUPS = {
 const QUALIFIED_TEAMS = Object.values(GROUPS).flat();
 const getFlagHtml = (code) => code ? `<img src="https://flagcdn.com/w40/${code}.png" class="flag-img" alt="">` : `🏳️`;
 
-// Partidos
+// Partidos (Sincronizados y estandarizados)
 const MATCHES=[]; let mId=1;
+const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+
 Object.keys(GROUPS).forEach((g,gIdx)=>{
   const t=GROUPS[g];
   [[0,1],[2,3],[0,2],[3,1],[3,0],[1,2]].forEach((pair,mIdx)=>{
-    let d=new Date(2026,5,11);d.setDate(d.getDate()+Math.floor(gIdx/2)+Math.floor(mIdx/2)*4);
-    let ds=d.toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'2-digit'}).replace('.','');
-    let hr=mIdx%2===0?"15:00":"21:00";
-    MATCHES.push({id:"m"+mId++,type:"group",round:"Grupo "+g,date:`${ds} ${hr}`,home:t[pair[0]],away:t[pair[1]],groupLetter:g,kickoff:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${hr}:00`});
+    let d=new Date(2026,5,11); 
+    d.setDate(d.getDate()+Math.floor(gIdx/2)+Math.floor(mIdx/2)*4);
+    
+    // 1. Forzamos un formato de texto único para evitar discrepancias entre dispositivos
+    let ds = `${String(d.getDate()).padStart(2,'0')} ${meses[d.getMonth()]} 26`;
+    let hr = mIdx%2===0?"15:00":"21:00";
+    
+    // 2. Añadimos '-04:00' al final del kickoff para que todos tengan exactamente el mismo punto de bloqueo
+    MATCHES.push({
+      id:"m"+mId++, type:"group", round:"Grupo "+g, date:`${ds} ${hr}`,
+      home:t[pair[0]], away:t[pair[1]], groupLetter:g,
+      kickoff:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${hr}:00-04:00`
+    });
   });
 });
+
 [{name:"16avos",count:16,start:new Date(2026,5,28)},{name:"Octavos",count:8,start:new Date(2026,6,4)},{name:"Cuartos",count:4,start:new Date(2026,6,9)},{name:"Semifinales",count:2,start:new Date(2026,6,14)},{name:"Final",count:1,start:new Date(2026,6,19)}]
-.forEach(r=>{for(let i=1;i<=r.count;i++){let d=new Date(r.start);d.setDate(d.getDate()+Math.floor((i-1)/4));let ds=d.toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'2-digit'}).replace('.','');let hr=i%2===0?"20:00":"15:00";MATCHES.push({id:"e"+(mId++),type:"knockout",round:r.name,date:`${ds} ${hr}`,home:{id:`${r.name}_${i}_H`,name:`Clasificado ${i}A`,code:null},away:{id:`${r.name}_${i}_A`,name:`Clasificado ${i}B`,code:null},kickoff:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${hr}:00`});}});
+.forEach(r=>{
+  for(let i=1;i<=r.count;i++){
+    let d=new Date(r.start); 
+    d.setDate(d.getDate()+Math.floor((i-1)/4));
+    
+    let ds = `${String(d.getDate()).padStart(2,'0')} ${meses[d.getMonth()]} 26`;
+    let hr = i%2===0?"20:00":"15:00";
+    
+    MATCHES.push({
+      id:"e"+(mId++), type:"knockout", round:r.name, date:`${ds} ${hr}`,
+      home:{id:`${r.name}_${i}_H`,name:`Clasificado ${i}A`,code:null}, 
+      away:{id:`${r.name}_${i}_A`,name:`Clasificado ${i}B`,code:null},
+      kickoff:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${hr}:00-04:00`
+    });
+  }
+});
 
 let currentUser=null;
 let currentGroupRound="Grupo A",currentKnockoutRound="16avos",currentAdminRound="Grupo A",currentRealGroupTab="A";
