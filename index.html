@@ -522,7 +522,7 @@ const REFRESH_INTERVAL  = 120000;
 
 // Fechas
 const MUNDIAL_KICKOFF = new Date("2026-06-11T15:00:00-04:00");
-const PRON_DEADLINE   = new Date(MUNDIAL_KICKOFF.getTime() - 24*60*60*1000);
+const PRON_DEADLINE   = new Date(MUNDIAL_KICKOFF.getTime() - 1*60*60*1000);
 function isPronClosed(){ return new Date() >= PRON_DEADLINE; }
 function timeLeft(){
   const ms = PRON_DEADLINE - new Date();
