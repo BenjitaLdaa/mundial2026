@@ -757,7 +757,7 @@ function renderPron(){
   document.getElementById("pron-form").classList.remove("hidden");
   let cdEl=document.getElementById("pron-cd");
   if(!cdEl){cdEl=document.createElement("div");cdEl.id="pron-cd";const f=document.getElementById("pron-form");f.insertBefore(cdEl,f.firstChild);}
-  cdEl.innerHTML=`<div class="countdown-banner">⏳ Cierra en <span class="countdown-val">${tl}</span>&nbsp;· 10 Jun 15:00 hrs</div>`;
+  cdEl.innerHTML=`<div class="countdown-banner">⏳ Cierra en <span class="countdown-val">${tl}</span>&nbsp;· 11 Jun 14:00 hrs</div>`;
   [1,2,3].forEach(pos=>{
     document.getElementById("team-list-"+pos).innerHTML=QUALIFIED_TEAMS.map(t=>`
       <div class="prog-team" id="pt_${pos}_${t.id}" onclick="selPron(${pos},'${t.id}')">
@@ -1086,7 +1086,7 @@ function renderGrupos(){
     const tl=timeLeft();
     let cdEl=document.getElementById("grupos-cd");
     if(!cdEl){cdEl=document.createElement("div");cdEl.id="grupos-cd";const gf=document.getElementById("grupos-form");gf.insertBefore(cdEl,gf.firstChild);}
-    cdEl.innerHTML=`<div class="countdown-banner">⏳ Cierra en <span class="countdown-val">${tl}</span>&nbsp;· 10 Jun 15:00 hrs</div>`;
+    cdEl.innerHTML=`<div class="countdown-banner">⏳ Cierra en <span class="countdown-val">${tl}</span>&nbsp;· 11 Jun 14:00 hrs</div>`;
     document.getElementById("grupos-list").innerHTML=Object.entries(GROUPS).map(([g,teams])=>`
       <div class="group-card"><div class="group-header">GRUPO ${g}</div><div style="padding:16px">
         <div style="font-size:11px;color:var(--wc-gold);margin-bottom:4px;font-weight:600">🥇 1° Lugar</div>
