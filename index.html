@@ -555,71 +555,50 @@ const GROUPS = {
 const QUALIFIED_TEAMS = Object.values(GROUPS).flat();
 const getFlagHtml = (code) => code ? `<img src="https://flagcdn.com/w40/${code}.png" class="flag-img" alt="">` : `🏳️`;
 
-// Partidos (Sincronizados y estandarizados)
+// Partidos
 const MATCHES=[]; let mId=1;
-const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
 
-Object.keys(GROUPS).forEach((g,gIdx)=>{
+// Aquí configuras las fechas EXACTAS de cada uno de los 6 partidos por grupo.
+// Formato: "YYYY-MM-DDTHH:MM:00" (El sistema lo adaptará a la hora local automáticamente)
+const GROUP_SCHEDULES = {
+  "A": ["2026-06-11T15:00:00", "2026-06-11T21:00:00", "2026-06-18T15:00:00", "2026-06-18T21:00:00", "2026-06-24T15:00:00", "2026-06-24T21:00:00"],
+  "B": ["2026-06-12T15:00:00", "2026-06-12T21:00:00", "2026-06-19T15:00:00", "2026-06-19T21:00:00", "2026-06-25T15:00:00", "2026-06-25T21:00:00"],
+  "C": ["2026-06-13T15:00:00", "2026-06-13T21:00:00", "2026-06-20T15:00:00", "2026-06-20T21:00:00", "2026-06-26T15:00:00", "2026-06-26T21:00:00"],
+  "D": ["2026-06-14T15:00:00", "2026-06-14T21:00:00", "2026-06-21T15:00:00", "2026-06-21T21:00:00", "2026-06-27T15:00:00", "2026-06-27T21:00:00"],
+  "E": ["2026-06-15T15:00:00", "2026-06-15T21:00:00", "2026-06-22T15:00:00", "2026-06-22T21:00:00", "2026-06-28T15:00:00", "2026-06-28T21:00:00"],
+  "F": ["2026-06-16T15:00:00", "2026-06-16T21:00:00", "2026-06-23T15:00:00", "2026-06-23T21:00:00", "2026-06-29T15:00:00", "2026-06-29T21:00:00"],
+  // Continúa con los demás grupos... (he puesto fechas lógicas que puedes cambiar después)
+  "G": ["2026-06-11T12:00:00", "2026-06-11T18:00:00", "2026-06-17T12:00:00", "2026-06-17T18:00:00", "2026-06-24T12:00:00", "2026-06-24T18:00:00"],
+  "H": ["2026-06-12T12:00:00", "2026-06-12T18:00:00", "2026-06-18T12:00:00", "2026-06-18T18:00:00", "2026-06-25T12:00:00", "2026-06-25T18:00:00"],
+  "I": ["2026-06-13T12:00:00", "2026-06-13T18:00:00", "2026-06-19T12:00:00", "2026-06-19T18:00:00", "2026-06-26T12:00:00", "2026-06-26T18:00:00"],
+  "J": ["2026-06-14T12:00:00", "2026-06-14T18:00:00", "2026-06-20T12:00:00", "2026-06-20T18:00:00", "2026-06-27T12:00:00", "2026-06-27T18:00:00"],
+  "K": ["2026-06-15T12:00:00", "2026-06-15T18:00:00", "2026-06-21T12:00:00", "2026-06-21T18:00:00", "2026-06-28T12:00:00", "2026-06-28T18:00:00"],
+  "L": ["2026-06-16T12:00:00", "2026-06-16T18:00:00", "2026-06-22T12:00:00", "2026-06-22T18:00:00", "2026-06-29T12:00:00", "2026-06-29T18:00:00"]
+};
+
+Object.keys(GROUPS).forEach((g)=>{
   const t=GROUPS[g];
+  const dates = GROUP_SCHEDULES[g] || [];
   [[0,1],[2,3],[0,2],[3,1],[3,0],[1,2]].forEach((pair,mIdx)=>{
-    let d=new Date(2026,5,11); 
-    d.setDate(d.getDate()+Math.floor(gIdx/2)+Math.floor(mIdx/2)*4);
-    
-    // 1. Forzamos un formato de texto único para evitar discrepancias entre dispositivos
-    let ds = `${String(d.getDate()).padStart(2,'0')} ${meses[d.getMonth()]} 26`;
-    let hr = mIdx%2===0?"15:00":"21:00";
-    
-    // 2. Añadimos '-04:00' al final del kickoff para que todos tengan exactamente el mismo punto de bloqueo
+    let kickoffStr = dates[mIdx] || `2026-06-11T15:00:00`; // Respaldo por si falta una fecha
+    let d = new Date(kickoffStr);
+    let ds = d.toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'2-digit'}).replace('.','');
+    let hr = d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+
     MATCHES.push({
-      id:"m"+mId++, type:"group", round:"Grupo "+g, date:`${ds} ${hr}`,
-      home:t[pair[0]], away:t[pair[1]], groupLetter:g,
-      kickoff:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${hr}:00-04:00`
+      id: "m"+mId++,
+      type: "group",
+      round: "Grupo "+g,
+      date: `${ds} ${hr}`,
+      home: t[pair[0]],
+      away: t[pair[1]],
+      groupLetter: g,
+      kickoff: kickoffStr
     });
   });
 });
-
-const fasesEliminatorias = [
-  {name:"16avos",count:16,start:new Date(2026,5,28)},
-  {name:"Octavos",count:8,start:new Date(2026,6,4)},
-  {name:"Cuartos",count:4,start:new Date(2026,6,9)},
-  {name:"Semifinales",count:2,start:new Date(2026,6,14)},
-  {name:"Final",count:1,start:new Date(2026,6,19)}
-];
-
-fasesEliminatorias.forEach(r=>{
-  for(let i=1;i<=r.count;i++){
-    let d=new Date(r.start); 
-    d.setDate(d.getDate()+Math.floor((i-1)/4));
-    
-    let ds = `${String(d.getDate()).padStart(2,'0')} ${meses[d.getMonth()]} 26`;
-    let hr = i%2===0?"20:00":"15:00";
-    
-    MATCHES.push({
-      id:"e"+(mId++), type:"knockout", round:r.name, date:`${ds} ${hr}`,
-      home:{id:`${r.name}_${i}_H`,name:`Clasificado ${i}A`,code:null}, 
-      away:{id:`${r.name}_${i}_A`,name:`Clasificado ${i}B`,code:null},
-      kickoff:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${hr}:00-04:00`
-    });
-  }
-});
-
 [{name:"16avos",count:16,start:new Date(2026,5,28)},{name:"Octavos",count:8,start:new Date(2026,6,4)},{name:"Cuartos",count:4,start:new Date(2026,6,9)},{name:"Semifinales",count:2,start:new Date(2026,6,14)},{name:"Final",count:1,start:new Date(2026,6,19)}]
-.forEach(r=>{
-  for(let i=1;i<=r.count;i++){
-    let d=new Date(r.start); 
-    d.setDate(d.getDate()+Math.floor((i-1)/4));
-    
-    let ds = `${String(d.getDate()).padStart(2,'0')} ${meses[d.getMonth()]} 26`;
-    let hr = i%2===0?"20:00":"15:00";
-    
-    MATCHES.push({
-      id:"e"+(mId++), type:"knockout", round:r.name, date:`${ds} ${hr}`,
-      home:{id:`${r.name}_${i}_H`,name:`Clasificado ${i}A`,code:null}, 
-      away:{id:`${r.name}_${i}_A`,name:`Clasificado ${i}B`,code:null},
-      kickoff:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${hr}:00-04:00`
-    });
-  }
-});
+.forEach(r=>{for(let i=1;i<=r.count;i++){let d=new Date(r.start);d.setDate(d.getDate()+Math.floor((i-1)/4));let ds=d.toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'2-digit'}).replace('.','');let hr=i%2===0?"20:00":"15:00";MATCHES.push({id:"e"+(mId++),type:"knockout",round:r.name,date:`${ds} ${hr}`,home:{id:`${r.name}_${i}_H`,name:`Clasificado ${i}A`,code:null},away:{id:`${r.name}_${i}_A`,name:`Clasificado ${i}B`,code:null},kickoff:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${hr}:00`});}});
 
 let currentUser=null;
 let currentGroupRound="Grupo A",currentKnockoutRound="16avos",currentAdminRound="Grupo A",currentRealGroupTab="A";
@@ -651,21 +630,73 @@ async function syncDatabase(){
 }
 if(USE_SUPABASE){syncDatabase();setInterval(syncDatabase,3000);}
 
-// API Football
+// API Football (Versión mejorada con control de fechas y aplazamientos)
 async function syncFromAPI(){
   if(!USE_API||API_FOOTBALL_KEY==="TU_API_KEY_AQUI")return;
   try{
-    const res=await fetch(`https://v3.football.api-sports.io/fixtures?league=1&season=2026&status=FT`,{headers:{"x-apisports-key":API_FOOTBALL_KEY}});
+    // Quitamos el status=FT para traer TODOS los partidos y vigilar los cambios de horario
+    const res=await fetch(`https://v3.football.api-sports.io/fixtures?league=1&season=2026`,{headers:{"x-apisports-key":API_FOOTBALL_KEY}});
     const data=await res.json();if(!data?.response)return;
+    
     const real=getRealResults();
+    let needsRender = false;
+
     data.response.forEach(fx=>{
-      const gh=fx.goals.home,ga=fx.goals.away;if(gh===null||ga===null)return;
-      const hn=fx.teams.home.name.toLowerCase(),an=fx.teams.away.name.toLowerCase();
-      const match=MATCHES.find(m=>{const mh=(m.home.name||"").toLowerCase(),ma=(m.away.name||"").toLowerCase();return mh.length>3&&(hn.includes(mh.slice(0,5))||mh.includes(hn.slice(0,5)))&&ma.length>3&&(an.includes(ma.slice(0,5))||ma.includes(an.slice(0,5)));});
-      if(match)real.matches[match.id]={home:gh,away:ga};
+      const hn=fx.teams.home.name.toLowerCase(), an=fx.teams.away.name.toLowerCase();
+      
+      // Buscar el partido en nuestro array local
+      const match=MATCHES.find(m=>{
+        const mh=(m.home.name||"").toLowerCase(), ma=(m.away.name||"").toLowerCase();
+        return mh.length>3&&(hn.includes(mh.slice(0,5))||mh.includes(hn.slice(0,5))) && ma.length>3&&(an.includes(ma.slice(0,5))||ma.includes(an.slice(0,5)));
+      });
+
+      if(match){
+        // 1. ACTUALIZAR FECHAS Y ESTADOS (Aplazados, reprogramaciones, retrasos)
+        const apiKickoff = new Date(fx.fixture.date);
+        const localKickoff = new Date(match.kickoff);
+        const status = fx.fixture.status.short;
+
+        // Si la API dice que la hora es distinta a la nuestra, o el partido fue aplazado (PST) / cancelado (CANC)
+        if(apiKickoff.getTime() !== localKickoff.getTime() || ["PST", "CANC", "INT"].includes(status)) {
+          match.kickoff = fx.fixture.date; // Actualizamos la hora límite de cierre dinámicamente
+          
+          let ds = apiKickoff.toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'2-digit'}).replace('.','');
+          let hr = apiKickoff.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+
+          match.date = `${ds} ${hr}`;
+          if (status === "PST") match.date += " (Aplazado)";
+          if (status === "CANC") match.date += " (Cancelado)";
+
+          needsRender = true; // Forzamos a repintar la vista para que el usuario vea el cambio de hora
+        }
+
+        // 2. ACTUALIZAR RESULTADOS
+        if(["FT", "AET", "PEN"].includes(status)){
+          const gh=fx.goals.home, ga=fx.goals.away;
+          if(gh!==null && ga!==null){
+            // Solo guardamos si el resultado es nuevo o distinto
+            if(!real.matches[match.id] || real.matches[match.id].home !== gh || real.matches[match.id].away !== ga){
+              real.matches[match.id] = {home:gh,away:ga};
+              needsRender = true;
+            }
+          }
+        }
+      }
     });
-    save("real",real);renderRanking();
-  }catch(e){}
+
+    if(needsRender) {
+      save("real",real);
+      renderRanking();
+      // Repintar las vistas si el usuario está en la pestaña de partidos para refrescar el candado "1h antes"
+      const pPage = document.getElementById("page-partidos");
+      const ePage = document.getElementById("page-eliminatorias");
+      if(pPage && pPage.classList.contains("active")) renderPartidos();
+      if(ePage && ePage.classList.contains("active")) renderPartidos();
+    }
+
+  }catch(e){
+    console.error("Error consultando la API:", e);
+  }
 }
 if(USE_API)setInterval(syncFromAPI,REFRESH_INTERVAL);
 
