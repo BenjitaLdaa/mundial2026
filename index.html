@@ -905,7 +905,6 @@ function showApp(){
   document.getElementById("nav-user-info").innerHTML=`<span>${currentUser.name}</span> <a onclick="location.reload()" style="cursor:pointer;color:#94a3b8;margin-left:8px;font-size:12px">Salir</a>`;
   if(currentUser.isAdmin)document.getElementById("admin-tab").classList.remove("hidden");
   syncFromAPI();
-  syncFixtureChanges();
   goTabDirect('ranking');
 }
 function goTab(tab){
