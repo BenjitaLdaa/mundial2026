@@ -504,10 +504,10 @@ const SUPABASE_URL      = "https://euajvjbwyjhskbjhgwvn.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_y7I__a0aHWWw-oqg0C1nSQ_a7mb2GDg";
 const USE_SUPABASE      = true;
 
-const API_FOOTBALL_KEY  = "2132fe09a0ea4666fb9fedf26a360966";
+const FOOTBALL_DATA_KEY = "c422abd6a5ce4ab3ba96deb2cdbc1309";
 const USE_API           = true;
 
-const REFRESH_INTERVAL  = 120000;
+const REFRESH_INTERVAL  = 300000; // 5 minutos, sobra para no pasarse del límite
 
 // Fechas — Hora de Santiago Chile (UTC-3 en invierno)
 // Inicio Mundial: 11 Jun 16:00 hrs Chile = 15:00 ET
@@ -724,15 +724,16 @@ if(USE_SUPABASE){syncDatabase();setInterval(syncDatabase,3000);}
 
 // ─── Sync resultados finales (FT) ───────────────────────────
 async function syncFromAPI(){
-  if(!USE_API||API_FOOTBALL_KEY==="TU_API_KEY_AQUI")return;
+  if(!USE_API||FOOTBALL_DATA_KEY==="PEGA_AQUI_TU_TOKEN")return;
   try{
-    const res=await fetch(`https://v3.football.api-sports.io/fixtures?league=1&season=2026&status=FT`,{headers:{"x-apisports-key":API_FOOTBALL_KEY}});
-    const data=await res.json();if(!data?.response)return;
+    const res=await fetch(`https://api.football-data.org/v4/competitions/WC/matches?status=FINISHED`,{headers:{"X-Auth-Token":FOOTBALL_DATA_KEY}});
+    const data=await res.json();if(!data?.matches)return;
     const real=getRealResults();
-    data.response.forEach(fx=>{
-      const gh=fx.goals.home,ga=fx.goals.away;if(gh===null||ga===null)return;
-      const hn=fx.teams.home.name.toLowerCase(),an=fx.teams.away.name.toLowerCase();
-      const match=MATCHES.find(m=>{const mh=(m.home.name||"").toLowerCase(),ma=(m.away.name||"").toLowerCase();return mh.length>3&&(hn.includes(mh.slice(0,5))||mh.includes(hn.slice(0,5)))&&ma.length>3&&(an.includes(ma.slice(0,5))||ma.includes(an.slice(0,5)));});
+    data.matches.forEach(fx=>{
+      const gh=fx.score?.fullTime?.home, ga=fx.score?.fullTime?.away;
+      if(gh===null||ga===null||gh===undefined||ga===undefined)return;
+      const hCode=fx.homeTeam?.tla, aCode=fx.awayTeam?.tla;
+      const match=MATCHES.find(m=>m.home.id===hCode && m.away.id===aCode);
       if(match)real.matches[match.id]={home:gh,away:ga};
     });
     save("real",real);renderRanking();
@@ -872,7 +873,7 @@ function applyFixtureChange(matchId, newKickoff){
 }
 
 // Llamar al inicio y cada 6 horas
-if(USE_API){ syncFixtureChanges(); setInterval(syncFixtureChanges, FIXTURE_SYNC_INTERVAL); }
+// if(USE_API){ syncFixtureChanges(); setInterval(syncFixtureChanges, FIXTURE_SYNC_INTERVAL); }
 
 function doRegister(){
   const name=document.getElementById("reg-name").value.trim();
