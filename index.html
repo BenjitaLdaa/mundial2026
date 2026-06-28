@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mundial 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --wc-red:   #C8102E;
+    --wc-blue:  #003DA5;
+    --wc-green: #00843D;
+    --wc-gold:  #F0AB00;
+    --bg:       #050c18;
+    --bg2:      #080f1e;
+    --bg3:      #0d1628;
+    --card:     #0a1322;
+    --border:   rgba(0,61,165,0.25);
+    --text:     #dce8ff;
+    --muted:    #5a7ab0;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body:    'DM Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; }
+
+  /* NAV */
+  nav { background: var(--bg2); border-bottom: 2px solid var(--wc-red); padding: 0 20px; display: flex; align-items: center; overflow-x: auto; position: sticky; top: 0; z-index: 100; }
+  .nav-brand { font-family: var(--font-display); font-size: 20px; letter-spacing: 1px; white-space: nowrap; margin-right: 20px; padding: 13px 0; flex-shrink: 0; }
+  .nav-tab { padding: 14px 14px; font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all .2s; flex-shrink: 0; }
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab.active { color: var(--wc-red); border-bottom-color: var(--wc-red); }
+  .nav-user { margin-left: auto; padding: 14px 0; font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .nav-user span { color: var(--wc-gold); font-weight: 600; }
+
+  /* PAGES */
+  .page { display: none; padding: 24px 20px; max-width: 1200px; margin: 0 auto; }
+  .page.active { display: block; }
+  .max-w-680 { max-width: 680px; margin: 0 auto; }
+
+  /* BASE */
+  .section-title { font-family: var(--font-display); font-size: 28px; letter-spacing: 1px; color: var(--text); margin-bottom: 4px; }
+  .section-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 12px; }
+  .card-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--wc-gold); font-weight: 600; margin-bottom: 16px; }
+  .input-group { margin-bottom: 16px; }
+  .input-group label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+  input[type=text], input[type=password], input[type=number], select { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; color: var(--text); font-family: var(--font-body); font-size: 15px; outline: none; transition: border .2s; }
+  input:focus, select:focus { border-color: var(--wc-blue); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--wc-red); color: #fff; font-family: var(--font-body); font-weight: 600; font-size: 14px; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; transition: all .15s; width: 100%; }
+  .btn:hover { background: #a0092a; }
+  .btn-outline { background: transparent; color: var(--wc-green); border: 1px solid var(--wc-green); }
+  .btn-outline:hover { background: var(--wc-green); color: #fff; }
+  .btn-sm { padding: 8px 16px; font-size: 13px; width: auto; border-radius: 6px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+  .badge-green { background: rgba(0,132,61,.18); color: #4ade80; }
+  .badge-gold  { background: rgba(240,171,0,.15); color: var(--wc-gold); }
+  .badge-red   { background: rgba(200,16,46,.15); color: #f87171; }
+  .badge-gray  { background: rgba(255,255,255,.08); color: #94a3b8; }
+  .alert { padding: 12px 16px; border-radius: 8px; font-size: 14px; margin-bottom: 16px; }
+  .alert-green { background: rgba(0,132,61,.1);  border: 1px solid rgba(0,132,61,.3);  color: #4ade80; }
+  .alert-gold  { background: rgba(240,171,0,.08); border: 1px solid rgba(240,171,0,.25); color: var(--wc-gold); }
+  .alert-red   { background: rgba(200,16,46,.09); border: 1px solid rgba(200,16,46,.3); color: #f87171; }
+
+  /* FLAGS */
+  .flag-img { width: 24px; height: 16px; object-fit: cover; border-radius: 2px; border: 1px solid rgba(255,255,255,.1); flex-shrink: 0; }
+  .match-team .flag-img { width: 42px; height: 28px; border-radius: 4px; margin-bottom: 4px; }
+  .team-pill .flag-img  { width: 20px; height: 14px; }
+  .prog-locked .flag-img { width: 30px; height: 20px; }
+  .standings-table .flag-img { width: 20px; height: 14px; }
+
+  /* ===== LOGIN CON VIDEO ===== */
+  #page-login { position: relative; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 24px 20px; overflow: hidden; }
+  #login-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: .42; }
+  .login-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,12,24,.5) 0%, rgba(5,12,24,.88) 100%); z-index: 1; }
+  .login-box { position: relative; z-index: 2; max-width: 380px; width: 100%; margin: 0 auto; }
+
+  /* ===== RANKING 2 COLUMNAS ===== */
+  .ranking-layout { display: grid; grid-template-columns: 1fr; gap: 24px; align-items: start; }
+  @media(min-width: 840px) { .ranking-layout { grid-template-columns: 1fr 1fr; } }
+
+  /* RANKING ROWS */
+  .rank-row { display: flex; align-items: center; gap: 14px; padding: 16px 18px; border-radius: 12px; margin-bottom: 8px; background: var(--bg2); border: 1px solid transparent; }
+  .rank-row.is-me { background: #071330; border-color: rgba(0,61,165,.35); }
+  .rank-num { font-size: 20px; min-width: 28px; text-align: center; }
+  .rank-pts { font-family: var(--font-display); font-size: 26px; color: #4ade80; line-height: 1; }
+  .rank-lbl { font-size: 10px; color: var(--muted); }
+  .me-badge { background: rgba(0,61,165,.25); color: #93c5fd; margin-left: 8px; padding: 2px 6px; font-size: 10px; border-radius: 4px; border: 1px solid rgba(0,61,165,.4); font-weight: 600; }
+  .points-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .pt-card { background: var(--bg3); border-radius: 8px; padding: 14px; text-align: center; }
+  .pt-val   { font-family: var(--font-display); font-size: 30px; color: #4ade80; line-height: 1; margin-bottom: 4px; }
+  .pt-label { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+  /* ===== REGLAMENTO ===== */
+  .reglamento-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .reglamento-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.05); }
+  .reglamento-item:last-child { border-bottom: none; }
+  .reglamento-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+  .ri-red   { background: rgba(200,16,46,.15); }
+  .ri-blue  { background: rgba(0,61,165,.18); }
+  .ri-green { background: rgba(0,132,61,.15); }
+  .ri-gold  { background: rgba(240,171,0,.13); }
+  .reglamento-title { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 3px; }
+  .reglamento-desc  { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .fecha-key { color: var(--wc-gold); font-weight: 600; }
+  .pts-g { color: #4ade80; font-weight: 600; }
+  .pts-o { color: #4ade80; font-weight: 600; }
+  .pts-r { color: #f87171; font-weight: 600; }
+
+  /* PRONÓSTICO */
+  .prog-team { display: flex; align-items: center; gap: 12px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; cursor: pointer; transition: all .15s; }
+  .prog-team.selected { border-color: var(--wc-blue); background: rgba(0,61,165,.1); }
+  .prog-team .name { font-weight: 500; flex: 1; font-size: 15px; }
+  .prog-team .check { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--muted); display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
+  .prog-team.selected .check { background: var(--wc-blue); border-color: var(--wc-blue); color: #fff; font-weight: 700; }
+  .prog-locked { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: rgba(0,61,165,.07); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; }
+  .countdown-banner { background: rgba(200,16,46,.07); border: 1px solid rgba(200,16,46,.3); border-radius: 10px; padding: 10px 16px; font-size: 13px; color: #f87171; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .countdown-val { font-family: var(--font-display); font-size: 22px; color: #f87171; }
+  .locked-banner { background: rgba(200,16,46,.07); border: 1px solid rgba(200,16,46,.22); border-radius: 10px; padding: 12px 16px; font-size: 13px; color: #f87171; margin-bottom: 14px; }
+
+  /* SPLIT LAYOUT */
+  .split-page { display: grid; grid-template-columns: 1fr; gap: 0; align-items: start; }
+  @media(min-width: 900px) { .split-page { grid-template-columns: 1fr 1px 1fr; } }
+  .col-right { padding-left: 0; }
+  @media(min-width: 900px) { .col-right { padding-left: 24px; } }
+  .split-divider-v { display: none; background: var(--border); width: 1px; align-self: stretch; min-height: 300px; }
+  @media(min-width: 900px) { .split-divider-v { display: block; } }
+  @media(max-width: 899px) { .col-right { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border); } }
+  .col-header { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; margin-bottom: 14px; }
+  .col-header-left  { color: #ffffff; }
+  .col-header-right { color: #ffffff; }
+
+  /* ===== MATCH CARD con tablita de puntos a la izquierda ===== */
+  .match-outer { display: flex; gap: 10px; align-items: stretch; margin-bottom: 12px; }
+  .pts-side-box { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 62px; padding: 10px 8px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg3); text-align: center; flex-shrink: 0; gap: 4px; }
+  .pts-side-box.exacto, .pts-side-box.ganador, .pts-side-box.cero { border-color: rgba(0,132,61,.4); background: rgba(0,132,61,.1); }
+  .pts-side-box.pending { border-color: var(--border); background: var(--bg3); }
+  .pts-side-num  { font-family: var(--font-display); font-size: 24px; line-height: 1; }
+  .pts-side-lbl  { font-size: 9px; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); line-height: 1.3; }
+  .pts-side-icon { font-size: 16px; line-height: 1; }
+  .exacto .pts-side-num, .ganador .pts-side-num, .cero .pts-side-num { color: #4ade80; }
+  .pending .pts-side-num { color: var(--muted); }
+  
+  .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; flex: 1; overflow: hidden; }
+  .match-card.historical { border-color: rgba(240,171,0,.35); }
+  .match-card-inner { padding: 14px 16px; }
+  .match-date { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted); margin-bottom: 12px; text-transform: uppercase; }
+  .match-body { display: flex; align-items: center; gap: 10px; }
+  .match-team { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+  .match-team .tname { font-size: 12px; font-weight: 600; text-align: center; }
+  .score-inputs { display: flex; align-items: center; gap: 6px; justify-content: center; }
+  .score-input { width: 44px; height: 44px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; text-align: center; color: var(--text); font-size: 18px; font-weight: 600; outline: none; }
+  .score-input:focus { border-color: var(--wc-blue); }
+  .match-locked { display: flex; flex-direction: column; align-items: center; gap: 4px; justify-content: center; padding: 8px 0; }
+  .score-display { font-family: var(--font-display); font-size: 28px; color: var(--wc-gold); }
+  .locked-card { opacity: .55; pointer-events: none; }
+  .match-card-real { background: rgba(240,171,0,.04); border: 1px solid rgba(240,171,0,.2); border-radius: 12px; padding: 14px; margin-bottom: 10px; }
+  .score-real { font-family: var(--font-display); font-size: 28px; color: var(--text); }
+  .no-results-hint { color: var(--muted); font-size: 13px; padding: 20px; text-align: center; border: 1px dashed var(--border); border-radius: 10px; line-height: 1.7; }
+
+  /* STANDINGS */
+  .standings-table { width: 100%; border-collapse: collapse; text-align: center; }
+  .standings-table th { color: var(--muted); font-size: 10px; font-weight: 500; text-transform: uppercase; padding: 8px 4px; border-bottom: 1px solid var(--border); }
+  .standings-table td { padding: 12px 4px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,.04); }
+  .standings-table .team-col { text-align: left; display: flex; align-items: center; gap: 8px; font-weight: 500; }
+  .standings-table .pts-col { font-weight: 700; color: var(--text); }
+  .rank-pos { font-family: var(--font-display); font-size: 16px; color: var(--muted); min-width: 14px; }
+
+  /* TABS */
+  .group-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .group-tab { padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--muted); font-size: 13px; cursor: pointer; transition: all .15s; }
+  .group-tab.active { background: var(--wc-blue); color: #fff; border-color: var(--wc-blue); font-weight: 600; }
+
+  /* GRUPOS */
+  .group-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+  .group-header { background: var(--bg3); padding: 12px 18px; font-family: var(--font-display); font-size: 18px; color: #ffffff; border-bottom: 1px solid var(--border); }
+  .selector-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .team-pill { padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg3); font-size: 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 78px; text-align: center; transition: all .15s; }
+  .team-pill.sel-1   { background: rgba(0,132,61,.12);  border-color: var(--wc-green); color: #4ade80; }
+  .team-pill.sel-2   { background: rgba(0,61,165,.12);  border-color: var(--wc-blue);  color: #93c5fd; }
+  .team-pill.sel-3rd { background: rgba(240,171,0,.1);  border-color: var(--wc-gold);  color: var(--wc-gold); }
+
+  /* API BAR */
+  .api-bar { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); padding: 8px 12px; background: var(--bg3); border-radius: 8px; border: 1px solid var(--border); margin-bottom: 16px; }
+  .api-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .api-dot.ok      { background: #4ade80; }
+  .api-dot.error   { background: #f87171; }
+  .api-dot.loading { background: var(--wc-gold); animation: blink 1s infinite; }
+  .api-dot.idle    { background: var(--muted); }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  /* ===== SELECTOR DE RESULTADO ===== */
+  .result-selector { display: flex; gap: 6px; margin-bottom: 10px; }
+  .rs-btn { flex: 1; padding: 8px 4px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg3); color: var(--muted); font-size: 12px; font-weight: 500; cursor: pointer; text-align: center; transition: all .15s; font-family: var(--font-body); }
+  .rs-btn:hover { border-color: var(--wc-blue); color: var(--text); }
+  .rs-btn.active-home, .rs-btn.active-draw, .rs-btn.active-away { background: rgba(0,61,165,.15); border-color: var(--wc-blue); color: #93c5fd; font-weight: 700; }
+  
+  .score-input.invalid { border-color: var(--wc-red) !important; }
+
+  .hidden { display: none !important; }
+  .mt16 { margin-top: 16px; }
+  .mt8  { margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand" style="padding: 8px 0; margin-right: 24px;">
+    <span style="font-family:var(--font-display);font-size:20px;letter-spacing:1px;color:#0a4a9c">MUNDIAL </span><span style="font-family:var(--font-display);font-size:20px;letter-spacing:1px;color:#9b0e22">2026</span>
+  </div>
+  <div class="nav-tab" onclick="goTab('reglamento')">Reglamento</div>
+  <div class="nav-tab active" onclick="goTab('ranking')">Ranking</div>
+  <div class="nav-tab" onclick="goTab('pronostico')">Mi Pronóstico</div>
+  <div class="nav-tab" onclick="goTab('grupos')">Clasificados de Grupo</div>
+  <div class="nav-tab" onclick="goTab('partidos')">Partidos</div>
+  <div class="nav-tab" onclick="goTab('eliminatorias')">Fase Eliminatoria</div>
+  <div id="admin-tab" class="nav-tab hidden" onclick="goTab('admin')">Admin ⚙️</div>
+  <div class="nav-user" id="nav-user-info"></div>
+</nav>
+
+<div id="page-login">
+  <video id="login-video" autoplay muted loop playsinline preload="auto">
+    <source src="Mundial26.mp4" type="video/mp4">
+  </video>
+  <div class="login-overlay"></div>
+  <div class="login-box">
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="font-family:var(--font-display);font-size:64px;letter-spacing:3px;line-height:.9">
+        <span style="color:#0a4a9c">MUNDIAL</span>
+      </div>
+      <div style="font-family:var(--font-display);font-size:64px;letter-spacing:3px;line-height:.9;margin-top:4px">
+        <span style="color:#9b0e22">2026</span>
+      </div>
+      <div style="font-size:10px;letter-spacing:4px;color:rgba(220,232,255,.5);margin-top:14px;text-transform:uppercase">United States · Canada · México</div>
+    </div>
+    <div id="form-login">
+      <div class="input-group"><label>Usuario</label><input type="text" id="login-user" placeholder="Tu nombre de usuario" autocomplete="username"></div>
+      <div class="input-group"><label>Contraseña</label><input type="password" id="login-pass" placeholder="••••••" autocomplete="current-password"></div>
+      <div id="login-error" class="alert alert-red hidden"></div>
+      <button class="btn" onclick="doLogin()">Entrar</button>
+      <div style="text-align:center;margin-top:12px;font-size:13px"><a style="color:#93c5fd;cursor:pointer" onclick="toggleForm()">Regístrate aquí</a></div>
+    </div>
+    <div id="form-register" class="hidden">
+      <div class="input-group"><label>Nombre para mostrar</label><input type="text" id="reg-name" placeholder="Tu nombre"></div>
+      <div class="input-group"><label>Usuario</label><input type="text" id="reg-user" placeholder="sin_espacios"></div>
+      <div class="input-group"><label>Contraseña</label><input type="password" id="reg-pass" placeholder="mínimo 4 caracteres"></div>
+      <div id="reg-error" class="alert alert-red hidden"></div>
+      <button class="btn" onclick="doRegister()">Crear cuenta</button>
+      <div style="text-align:center;margin-top:12px;font-size:13px"><a style="color:#93c5fd;cursor:pointer" onclick="toggleForm()">Ya tengo cuenta</a></div>
+    </div>
+  </div>
+</div>
+
+<div id="main-pages" class="hidden">
+
+<div id="page-reglamento" class="page max-w-680">
+  <div class="section-title">REGLAMENTO</div>
+  <div class="section-sub">Todo lo que necesitas saber para jugar</div>
+  <div class="reglamento-card" style="padding:0;overflow:hidden">
+    <div style="background:var(--bg3);padding:14px 20px;border-bottom:1px solid var(--border)">
+      <div style="font-family:var(--font-display);font-size:16px;color:var(--wc-gold);letter-spacing:1px">REGLAS GENERALES</div>
+    </div>
+    <div style="padding:0 20px">
+      <div class="reglamento-item">
+        <div class="reglamento-icon ri-gold">🔒</div>
+        <div>
+          <div class="reglamento-title">Bloqueo automático</div>
+          <div class="reglamento-desc">El Pronóstico Final y los Clasificados de Grupo se cierran automáticamente <span class="pts-r">1h antes</span> del primer partido del Mundial. Cada partido individual (fase de grupos y eliminatoria) se cierra <span class="pts-r">15 minutos antes</span> de su propio horario de inicio. Una vez cerrado, no hay excepciones.</div>
+        </div>
+      </div>
+      <div class="reglamento-item">
+        <div class="reglamento-icon ri-blue">👥</div>
+        <div>
+          <div class="reglamento-title">Multijugador en tiempo real</div>
+          <div class="reglamento-desc">Todos los participantes ven el ranking actualizado simultáneamente una vez finalizado el partido.</div>
+        </div>
+      </div>
+      <div class="reglamento-item">
+        <div class="reglamento-icon ri-red">🥇</div>
+        <div>
+          <div class="reglamento-title">¿Cómo se definirá al ganador?</div>
+          <div class="reglamento-desc">El jugador con más puntos acumulados al finalizar el torneo el <span class="fecha-key">19 Jul 2026</span> gana. En caso de empate, desempata quien tenga más resultados exactos de partido.</div>
+        </div>
+      </div>
+      <div class="reglamento-item">
+        <div class="reglamento-icon ri-gold">📅</div>
+        <div>
+          <div class="reglamento-title">Fechas clave</div>
+          <div class="reglamento-desc">
+            <span class="fecha-key">11 Jun · 15:00 hrs</span> — Cierre pronóstico final y clasificados (1h antes del inicio)<br>
+            <span class="fecha-key">11 Jun · 16:00 hrs</span> — Inicio del Mundial: México vs Sudáfrica<br>
+            <span class="fecha-key">19 Jul · 16:00 hrs</span> — Gran Final · MetLife Stadium, Nueva Jersey
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--bg3);padding:14px 20px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-top:8px">
+      <div style="font-family:var(--font-display);font-size:16px;color:var(--wc-gold);letter-spacing:1px">MODALIDADES DE JUEGO</div>
+    </div>
+    <div style="padding:0 20px">
+      <div class="reglamento-item">
+        <div class="reglamento-icon ri-red">🏆</div>
+        <div>
+          <div class="reglamento-title">Mi Pronóstico</div>
+          <div class="reglamento-desc">Elige quién será campeón, subcampeón y tercer lugar del Mundial. Disponible hasta <span class="pts-r">1 hora antes</span> del primer partido. Una vez guardado, <strong>no se puede modificar</strong>.<br>
+          Puntos: <span class="pts-g">10</span> campeón · <span class="pts-g">10</span> subcampeón · <span class="pts-g">10</span> tercer lugar.<br>
+          Si aciertas los tres: <span class="pts-g">30 puntos</span> en total.</div>
+        </div>
+      </div>
+      <div class="reglamento-item">
+        <div class="reglamento-icon ri-green">📊</div>
+        <div>
+          <div class="reglamento-title">Clasificados por Grupo</div>
+          <div class="reglamento-desc">Predice el 1° y 2° lugar de cada uno de los 12 grupos, más exactamente 8 mejores terceros que avanzan a 16avos. Disponible hasta <span style="color:var(--wc-red);font-weight:600">1 hora antes</span> del Mundial.<br>
+          • Posición exacta: <span class="pts-g">+10 pts</span><br>
+          • Clasificado en distinta posición: <span class="pts-o">+3 pts</span></div>
+        </div>
+      </div>
+      <div class="reglamento-item">
+        <div class="reglamento-icon ri-blue">⚽</div>
+        <div>
+          <div class="reglamento-title">Partidos — Fase de Grupos</div>
+          <div class="reglamento-desc">Puedes ingresar y modificar tu predicción desde que se habilita (<span class="pts-g">24h antes</span>) hasta el cierre (<span class="pts-r">15 minutos antes</span> del pitazo).<br>
+          • Resultado exacto (ej: 2-1 y sale 2-1): <span class="pts-g">+5 pts</span> + <span class="pts-g">+3 pts</span> ganador = <span class="pts-g">8 pts</span><br>
+          • Empate correcto sin marcador exacto (ej: 0-0 y sale 1-1): <span class="pts-o">+3 pts</span><br>
+          • Ganador correcto sin marcador exacto: <span class="pts-o">+3 pts</span><br>
+          • Sin acierto: 0 pts</div>
+        </div>
+      </div>
+      <div class="reglamento-item">
+        <div class="reglamento-icon ri-blue">🏟️</div>
+        <div>
+          <div class="reglamento-title">Fase Eliminatoria</div>
+          <div class="reglamento-desc">Mismo sistema que la fase de grupos. Los partidos se habilitan <span class="pts-g">24h antes</span> y cierran <span class="pts-r">15 minutos antes</span> del partido.<br>
+          • Resultado exacto: <span class="pts-g">+5 pts</span> + <span class="pts-g">+3 pts</span> ganador = <span class="pts-g">8 pts</span><br>
+          • Ganador correcto sin marcador exacto: <span class="pts-o">+3 pts</span><br>
+          • Empate correcto sin marcador exacto: <span class="pts-o">+3 pts</span><br>
+          • Sin acierto: 0 pts<br><br>
+          <strong style="color:var(--wc-gold)">⚠️ Importante:</strong> Solo se cuenta el resultado de los <strong style="color:var(--text)">90 minutos reglamentarios</strong>. El tiempo extra y los penales no se consideran.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="page-ranking" class="page active max-w-680">
+  <div class="section-title">RANKING</div>
+  <div class="section-sub">Puntuación en tiempo real · Se actualiza automáticamente</div>
+  <div id="api-status" class="api-bar hidden"><div class="api-dot idle" id="api-dot"></div><span id="api-msg">Comprobando API...</span></div>
+  <div id="ranking-list" style="margin-bottom:24px"></div>
+  <div class="card" style="background:var(--bg2)">
+    <div class="card-title">SISTEMA DE PUNTOS</div>
+    <div class="points-grid">
+      <div class="pt-card"><div class="pt-val">10</div><div class="pt-label">Podio exacto (por equipo)</div></div>
+      <div class="pt-card"><div class="pt-val">5</div><div class="pt-label">Resultado exacto de partido</div></div>
+      <div class="pt-card"><div class="pt-val">3</div><div class="pt-label">Ganador correcto o empate</div></div>
+      <div class="pt-card"><div class="pt-val">10</div><div class="pt-label">Clasificado en posición exacta</div></div>
+      <div class="pt-card"><div class="pt-val">3</div><div class="pt-label">Clasificado (posición distinta)</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="page-pronostico" class="page max-w-680">
+  <div class="section-title">MI PRONÓSTICO</div>
+  <div class="section-sub">Solo aparecen los 48 equipos clasificados oficiales.</div>
+  <div id="pron-locked-view" class="hidden">
+    <div class="alert alert-green">✅ Pronóstico guardado y bloqueado.</div>
+    <div class="card" id="pron-locked-content"></div>
+  </div>
+  <div id="pron-form">
+    <div class="alert alert-red">⚠️ Al guardar no podrás modificarlo. Elige con cuidado.</div>
+    <div class="card">
+      <div style="font-size:11px;color:var(--muted);margin:12px 0 6px">🥇 CAMPEÓN (10 PTS)</div>
+      <div id="team-list-1"></div>
+      <div style="font-size:11px;color:var(--muted);margin:24px 0 6px">🥈 SUBCAMPEÓN (10 PTS)</div>
+      <div id="team-list-2"></div>
+      <div style="font-size:11px;color:var(--muted);margin:24px 0 6px">🥉 TERCER LUGAR (10 PTS)</div>
+      <div id="team-list-3"></div>
+      <button class="btn mt16" onclick="savePron()">Fijar Pronóstico Final</button>
+    </div>
+  </div>
+</div>
+
+<div id="page-grupos" class="page">
+  <div class="section-title">CLASIFICADOS POR GRUPO</div>
+  <div class="section-sub">Disponible hasta <strong style="color:var(--wc-red)">1 hora antes</strong> del Mundial. Toca de nuevo un equipo para desmarcarlo.</div>
+  <div class="split-page">
+    <div>
+      <div class="col-header col-header-left">Tu Predicción de Clasificados</div>
+      <div id="grupos-locked-view" class="hidden">
+        <div class="alert alert-green">✅ Predicción guardada y bloqueada.</div>
+        <div id="grupos-locked-content"></div>
+      </div>
+      <div id="grupos-form">
+        <div class="alert alert-gold" style="font-size:13px;color:#ffffff">Selecciona 1° y 2° de TODOS los grupos + EXACTAMENTE 8 terceros.</div>
+        <div id="grupos-error" class="alert alert-red hidden"></div>
+        <div id="grupos-list"></div>
+        <button class="btn mt16" onclick="saveGrupos()">Guardar y Bloquear Grupos</button>
+      </div>
+    </div>
+    <div class="split-divider-v"></div>
+    <div class="col-right">
+      <div class="col-header col-header-right">Resultados Reales de Grupos</div>
+      <div class="group-tabs" id="real-group-tabs"></div>
+      <div id="real-group-results"></div>
+    </div>
+  </div>
+</div>
+
+<div id="page-partidos" class="page">
+  <div class="section-title">FASE DE GRUPOS</div>
+  <div class="section-sub">Se habilitan <strong style="color:var(--wc-red)">24 horas antes</strong> · Cierre <strong style="color:var(--wc-red)">15 minutos antes</strong> del partido. Puedes editar hasta el cierre.</div>
+  <div class="group-tabs" id="round-tabs-groups"></div>
+  <div class="split-page">
+    <div>
+      <div class="col-header col-header-left">Tus Pronósticos</div>
+      <div id="matches-list-groups"></div>
+    </div>
+    <div class="split-divider-v"></div>
+    <div class="col-right">
+      <div class="col-header col-header-right">Resultados Reales</div>
+      <div id="real-matches-groups"></div>
+      <div class="card mt16">
+        <div class="card-title" style="color:#ffffff"><span id="standings-title">POSICIONES</span></div>
+        <div id="standings-container"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="page-eliminatorias" class="page">
+  <div class="section-title">FASE ELIMINATORIA</div>
+  <div class="section-sub">Se habilitan <strong style="color:var(--wc-red)">24 horas antes</strong> · Cierre <strong style="color:var(--wc-red)">15 minutos antes</strong> del partido · <strong style="color:#ffffff">Solo se cuentan los 90 minutos reglamentarios</strong></div>
+  <div class="group-tabs" id="round-tabs-knockouts"></div>
+  <div class="split-page">
+    <div>
+      <div class="col-header col-header-left">Tus Pronósticos</div>
+      <div id="matches-list-knockouts"></div>
+    </div>
+    <div class="split-divider-v"></div>
+    <div class="col-right">
+      <div class="col-header col-header-right">Resultados Reales</div>
+      <div id="real-matches-knockouts"></div>
+    </div>
+  </div>
+</div>
+
+<div id="page-admin" class="page max-w-680">
+  <div class="section-title">PANEL ADMIN</div>
+  <div class="alert alert-gold" style="font-size:13px">💡 Con la API conectada los resultados se cargan solos. Este panel es para correcciones manuales.</div>
+  <div class="card">
+    <div class="card-title">Cargar Resultados Reales</div>
+    <div class="group-tabs" id="admin-round-tabs"></div>
+    <div id="admin-matches-list"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Podio Oficial del Torneo</div>
+    <div class="input-group"><label>Campeón Real</label><select id="admin-winner"></select></div>
+    <div class="input-group"><label>Subcampeón Real</label><select id="admin-second"></select></div>
+    <div class="input-group"><label>Tercero Real</label><select id="admin-third"></select></div>
+    <button class="btn btn-sm mt16" onclick="saveRealWinners()">Guardar Podio Oficial</button>
+  </div>
+  <div class="card">
+    <div class="card-title">USUARIOS REGISTRADOS</div>
+    <div id="admin-users-list"><div style="color:var(--muted);font-size:13px">Cargando...</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:#f87171">ZONA PELIGROSA</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.7">
+      <strong style="color:var(--text)">Borrar mis datos de prueba</strong> — solo tus predicciones, sin tocar a los demás.<br>
+      <strong style="color:var(--text)">Borrar TODOS los datos</strong> — limpia todo antes de compartir.
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-sm btn-outline" style="width:auto;color:var(--muted);border-color:var(--muted)" onclick="resetMyData()">🧹 Borrar mis datos de prueba</button>
+      <button class="btn btn-sm" style="background:var(--wc-red);color:#fff;width:auto" onclick="resetAll()">🗑 Borrar TODOS los datos</button>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:rgba(240,171,0,.3)">
+    <div class="card-title" style="color:var(--wc-gold)">🎮 MODO DEMO / PREVISUALIZACIÓN</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6">
+      Activa el <strong style="color:var(--text)">Modo Demo</strong> para ver cómo se ve la página cuando los partidos están abiertos.<br><br>
+      <strong style="color:var(--wc-gold)">Solo para previsualización.</strong> Los datos que guardes en modo demo son reales y se guardan normalmente.
+    </div>
+    <div id="demo-status" style="margin-bottom:12px;font-size:13px;color:var(--muted)">Estado: <span id="demo-badge" class="badge badge-gray">INACTIVO</span></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-sm" style="background:var(--wc-gold);color:#000;width:auto" onclick="toggleDemo(true)">▶ Activar Modo Demo</button>
+      <button class="btn btn-sm btn-outline" style="width:auto" onclick="toggleDemo(false)">■ Desactivar</button>
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+const ADMIN_USER = "admin";
+const ADMIN_PASS = "mundial2026";
+const SUPABASE_URL      = "https://euajvjbwyjhskbjhgwvn.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_y7I__a0aHWWw-oqg0C1nSQ_a7mb2GDg";
+const USE_SUPABASE      = true;
+
+const FOOTBALL_DATA_KEY = "c422abd6a5ce4ab3ba96deb2cdbc1309";
+const USE_API           = true;
+
+const REFRESH_INTERVAL  = 300000; // 5 minutos
+
+// ─── Mapa de TLA codes de football-data.org → IDs internos del juego ───────
+// football-data.org usa sus propios códigos de 3 letras que pueden diferir
+const TLA_TO_ID = {
+  "MEX":"MEX","ZAF":"RSA","RSA":"RSA","KOR":"KOR","CZE":"CZE",
+  "CAN":"CAN","SUI":"SUI","QAT":"QAT","BIH":"BIH",
+  "BRA":"BRA","MAR":"MAR","HAI":"HAI","SCO":"SCO","GBR":"SCO",
+  "USA":"USA","PAR":"PAR","AUS":"AUS","TUR":"TUR",
+  "GER":"GER","CUW":"CUW","CIV":"CIV","ECU":"ECU",
+  "NED":"NED","JPN":"JPN","TUN":"TUN","SWE":"SWE",
+  "BEL":"BEL","EGY":"EGY","IRN":"IRN","IRQ":"IRQ","NZL":"NZL",
+  "ESP":"ESP","CPV":"CPV","KSA":"KSA","URU":"URU",
+  "FRA":"FRA","SEN":"SEN","NOR":"NOR",
+  "ARG":"ARG","ALG":"ALG","DZA":"ALG","AUT":"AUT","JOR":"JOR",
+  "POR":"POR","UZB":"UZB","COL":"COL","COD":"COD","DRC":"COD",
+  "ENG":"ENG","CRO":"CRO","GHA":"GHA","PAN":"PAN"
+};
+
+// Fechas — Hora de Santiago Chile (UTC-4 en invierno)
+const MUNDIAL_KICKOFF = new Date("2026-06-11T15:00:00-04:00");
+const PRON_DEADLINE   = new Date(MUNDIAL_KICKOFF.getTime() - 1*60*60*1000);
+function isPronClosed(){ return new Date() >= PRON_DEADLINE; }
+function timeLeft(){
+  const ms = PRON_DEADLINE - new Date();
+  if(ms <= 0) return null;
+  const days  = Math.floor(ms/86400000);
+  const hours = Math.floor((ms%86400000)/3600000);
+  const mins  = Math.floor((ms%3600000)/60000);
+  return days >= 1 ? `${days} día${days>1?'s':''} ${hours}h` : `${hours}h ${mins}m`;
+}
+
+const PREFIX = "wc26_mio_";
+let TEST_MODE = false;
+
+const GROUPS = {
+  "A":[{id:"MEX",name:"México",code:"mx"},{id:"RSA",name:"Sudáfrica",code:"za"},{id:"KOR",name:"Corea Sur",code:"kr"},{id:"CZE",name:"R. Checa",code:"cz"}],
+  "B":[{id:"CAN",name:"Canadá",code:"ca"},{id:"SUI",name:"Suiza",code:"ch"},{id:"QAT",name:"Qatar",code:"qa"},{id:"BIH",name:"Bosnia",code:"ba"}],
+  "C":[{id:"BRA",name:"Brasil",code:"br"},{id:"MAR",name:"Marruecos",code:"ma"},{id:"HAI",name:"Haití",code:"ht"},{id:"SCO",name:"Escocia",code:"gb-sct"}],
+  "D":[{id:"USA",name:"EE.UU.",code:"us"},{id:"PAR",name:"Paraguay",code:"py"},{id:"AUS",name:"Australia",code:"au"},{id:"TUR",name:"Turquía",code:"tr"}],
+  "E":[{id:"GER",name:"Alemania",code:"de"},{id:"CUW",name:"Curazao",code:"cw"},{id:"CIV",name:"C. Marfil",code:"ci"},{id:"ECU",name:"Ecuador",code:"ec"}],
+  "F":[{id:"NED",name:"P. Bajos",code:"nl"},{id:"JPN",name:"Japón",code:"jp"},{id:"TUN",name:"Túnez",code:"tn"},{id:"SWE",name:"Suecia",code:"se"}],
+  "G":[{id:"BEL",name:"Bélgica",code:"be"},{id:"EGY",name:"Egipto",code:"eg"},{id:"IRN",name:"Irán",code:"ir"},{id:"NZL",name:"N. Zelanda",code:"nz"}],
+  "H":[{id:"ESP",name:"España",code:"es"},{id:"CPV",name:"Cabo Verde",code:"cv"},{id:"KSA",name:"A. Saudita",code:"sa"},{id:"URU",name:"Uruguay",code:"uy"}],
+  "I":[{id:"FRA",name:"Francia",code:"fr"},{id:"SEN",name:"Senegal",code:"sn"},{id:"NOR",name:"Noruega",code:"no"},{id:"IRQ",name:"Irak",code:"iq"}],
+  "J":[{id:"ARG",name:"Argentina",code:"ar"},{id:"ALG",name:"Argelia",code:"dz"},{id:"AUT",name:"Austria",code:"at"},{id:"JOR",name:"Jordania",code:"jo"}],
+  "K":[{id:"POR",name:"Portugal",code:"pt"},{id:"UZB",name:"Uzbekistán",code:"uz"},{id:"COL",name:"Colombia",code:"co"},{id:"COD",name:"RD Congo",code:"cd"}],
+  "L":[{id:"ENG",name:"Inglaterra",code:"gb-eng"},{id:"CRO",name:"Croacia",code:"hr"},{id:"GHA",name:"Ghana",code:"gh"},{id:"PAN",name:"Panamá",code:"pa"}]
+};
+const QUALIFIED_TEAMS = Object.values(GROUPS).flat();
+const getFlagHtml = (code) => code ? `<img src="https://flagcdn.com/w40/${code}.png" class="flag-img" alt="">` : `🏳️`;
+
+// ─── Lookup rápido por ID ────────────────────────────────────────────────────
+function getTeam(id){ return QUALIFIED_TEAMS.find(t=>t.id===id)||null; }
+
+// ============================================================
+// FIXTURE OFICIAL FIFA WORLD CUP 2026 — CLT (UTC-4)
+// ============================================================
+const MATCHES = [
+
+// ===== GRUPO A =====
+{id:"m1",  type:"group", round:"Grupo A", date:"11 jun · 15:00", home:{id:"MEX",name:"México",code:"mx"},     away:{id:"RSA",name:"Sudáfrica",code:"za"},   groupLetter:"A", kickoff:"2026-06-11T15:00:00-04:00"},
+{id:"m2",  type:"group", round:"Grupo A", date:"11 jun · 22:00", home:{id:"KOR",name:"Corea Sur",code:"kr"},  away:{id:"CZE",name:"R. Checa",code:"cz"},    groupLetter:"A", kickoff:"2026-06-11T22:00:00-04:00"},
+{id:"m3",  type:"group", round:"Grupo A", date:"18 jun · 12:00", home:{id:"CZE",name:"R. Checa",code:"cz"},   away:{id:"RSA",name:"Sudáfrica",code:"za"},    groupLetter:"A", kickoff:"2026-06-18T12:00:00-04:00"},
+{id:"m4",  type:"group", round:"Grupo A", date:"18 jun · 21:00", home:{id:"MEX",name:"México",code:"mx"},     away:{id:"KOR",name:"Corea Sur",code:"kr"},    groupLetter:"A", kickoff:"2026-06-18T21:00:00-04:00"},
+{id:"m5",  type:"group", round:"Grupo A", date:"24 jun · 21:00", home:{id:"CZE",name:"R. Checa",code:"cz"},   away:{id:"MEX",name:"México",code:"mx"},        groupLetter:"A", kickoff:"2026-06-24T21:00:00-04:00"},
+{id:"m6",  type:"group", round:"Grupo A", date:"24 jun · 21:00", home:{id:"RSA",name:"Sudáfrica",code:"za"},  away:{id:"KOR",name:"Corea Sur",code:"kr"},    groupLetter:"A", kickoff:"2026-06-24T21:00:00-04:00"},
+// ===== GRUPO B =====
+{id:"m7",  type:"group", round:"Grupo B", date:"12 jun · 15:00", home:{id:"CAN",name:"Canadá",code:"ca"},     away:{id:"BIH",name:"Bosnia",code:"ba"},       groupLetter:"B", kickoff:"2026-06-12T15:00:00-04:00"},
+{id:"m8",  type:"group", round:"Grupo B", date:"13 jun · 15:00", home:{id:"QAT",name:"Qatar",code:"qa"},      away:{id:"SUI",name:"Suiza",code:"ch"},         groupLetter:"B", kickoff:"2026-06-13T15:00:00-04:00"},
+{id:"m9",  type:"group", round:"Grupo B", date:"18 jun · 15:00", home:{id:"SUI",name:"Suiza",code:"ch"},      away:{id:"BIH",name:"Bosnia",code:"ba"},        groupLetter:"B", kickoff:"2026-06-18T15:00:00-04:00"},
+{id:"m10", type:"group", round:"Grupo B", date:"18 jun · 18:00", home:{id:"CAN",name:"Canadá",code:"ca"},     away:{id:"QAT",name:"Qatar",code:"qa"},         groupLetter:"B", kickoff:"2026-06-18T18:00:00-04:00"},
+{id:"m11", type:"group", round:"Grupo B", date:"24 jun · 15:00", home:{id:"SUI",name:"Suiza",code:"ch"},      away:{id:"CAN",name:"Canadá",code:"ca"},        groupLetter:"B", kickoff:"2026-06-24T15:00:00-04:00"},
+{id:"m12", type:"group", round:"Grupo B", date:"24 jun · 15:00", home:{id:"BIH",name:"Bosnia",code:"ba"},     away:{id:"QAT",name:"Qatar",code:"qa"},         groupLetter:"B", kickoff:"2026-06-24T15:00:00-04:00"},
+// ===== GRUPO C =====
+{id:"m13", type:"group", round:"Grupo C", date:"13 jun · 18:00", home:{id:"BRA",name:"Brasil",code:"br"},     away:{id:"MAR",name:"Marruecos",code:"ma"},    groupLetter:"C", kickoff:"2026-06-13T18:00:00-04:00"},
+{id:"m14", type:"group", round:"Grupo C", date:"13 jun · 21:00", home:{id:"HAI",name:"Haití",code:"ht"},      away:{id:"SCO",name:"Escocia",code:"gb-sct"},  groupLetter:"C", kickoff:"2026-06-13T21:00:00-04:00"},
+{id:"m15", type:"group", round:"Grupo C", date:"19 jun · 18:00", home:{id:"SCO",name:"Escocia",code:"gb-sct"},away:{id:"MAR",name:"Marruecos",code:"ma"},    groupLetter:"C", kickoff:"2026-06-19T18:00:00-04:00"},
+{id:"m16", type:"group", round:"Grupo C", date:"19 jun · 20:30", home:{id:"BRA",name:"Brasil",code:"br"},     away:{id:"HAI",name:"Haití",code:"ht"},        groupLetter:"C", kickoff:"2026-06-19T20:30:00-04:00"},
+{id:"m17", type:"group", round:"Grupo C", date:"24 jun · 18:00", home:{id:"SCO",name:"Escocia",code:"gb-sct"},away:{id:"BRA",name:"Brasil",code:"br"},       groupLetter:"C", kickoff:"2026-06-24T18:00:00-04:00"},
+{id:"m18", type:"group", round:"Grupo C", date:"24 jun · 18:00", home:{id:"MAR",name:"Marruecos",code:"ma"},  away:{id:"HAI",name:"Haití",code:"ht"},        groupLetter:"C", kickoff:"2026-06-24T18:00:00-04:00"},
+// ===== GRUPO D =====
+{id:"m19", type:"group", round:"Grupo D", date:"14 jun · 00:00", home:{id:"AUS",name:"Australia",code:"au"},  away:{id:"TUR",name:"Turquía",code:"tr"},      groupLetter:"D", kickoff:"2026-06-14T00:00:00-04:00"},
+{id:"m20", type:"group", round:"Grupo D", date:"12 jun · 21:00", home:{id:"USA",name:"EE.UU.",code:"us"},     away:{id:"PAR",name:"Paraguay",code:"py"},     groupLetter:"D", kickoff:"2026-06-12T21:00:00-04:00"},
+{id:"m21", type:"group", round:"Grupo D", date:"19 jun · 15:00", home:{id:"USA",name:"EE.UU.",code:"us"},     away:{id:"AUS",name:"Australia",code:"au"},    groupLetter:"D", kickoff:"2026-06-19T15:00:00-04:00"},
+{id:"m22", type:"group", round:"Grupo D", date:"19 jun · 23:00", home:{id:"TUR",name:"Turquía",code:"tr"},    away:{id:"PAR",name:"Paraguay",code:"py"},     groupLetter:"D", kickoff:"2026-06-19T23:00:00-04:00"},
+{id:"m23", type:"group", round:"Grupo D", date:"25 jun · 22:00", home:{id:"TUR",name:"Turquía",code:"tr"},    away:{id:"USA",name:"EE.UU.",code:"us"},       groupLetter:"D", kickoff:"2026-06-25T22:00:00-04:00"},
+{id:"m24", type:"group", round:"Grupo D", date:"25 jun · 22:00", home:{id:"PAR",name:"Paraguay",code:"py"},   away:{id:"AUS",name:"Australia",code:"au"},    groupLetter:"D", kickoff:"2026-06-25T22:00:00-04:00"},
+// ===== GRUPO E =====
+{id:"m25", type:"group", round:"Grupo E", date:"14 jun · 13:00", home:{id:"GER",name:"Alemania",code:"de"},   away:{id:"CUW",name:"Curazao",code:"cw"},      groupLetter:"E", kickoff:"2026-06-14T13:00:00-04:00"},
+{id:"m26", type:"group", round:"Grupo E", date:"14 jun · 19:00", home:{id:"CIV",name:"C. Marfil",code:"ci"},  away:{id:"ECU",name:"Ecuador",code:"ec"},      groupLetter:"E", kickoff:"2026-06-14T19:00:00-04:00"},
+{id:"m27", type:"group", round:"Grupo E", date:"20 jun · 16:00", home:{id:"GER",name:"Alemania",code:"de"},   away:{id:"CIV",name:"C. Marfil",code:"ci"},    groupLetter:"E", kickoff:"2026-06-20T16:00:00-04:00"},
+{id:"m28", type:"group", round:"Grupo E", date:"20 jun · 20:00", home:{id:"ECU",name:"Ecuador",code:"ec"},    away:{id:"CUW",name:"Curazao",code:"cw"},      groupLetter:"E", kickoff:"2026-06-20T20:00:00-04:00"},
+{id:"m29", type:"group", round:"Grupo E", date:"25 jun · 16:00", home:{id:"CUW",name:"Curazao",code:"cw"},    away:{id:"CIV",name:"C. Marfil",code:"ci"},    groupLetter:"E", kickoff:"2026-06-25T16:00:00-04:00"},
+{id:"m30", type:"group", round:"Grupo E", date:"25 jun · 16:00", home:{id:"ECU",name:"Ecuador",code:"ec"},    away:{id:"GER",name:"Alemania",code:"de"},      groupLetter:"E", kickoff:"2026-06-25T16:00:00-04:00"},
+// ===== GRUPO F =====
+{id:"m31", type:"group", round:"Grupo F", date:"14 jun · 16:00", home:{id:"NED",name:"P. Bajos",code:"nl"},   away:{id:"JPN",name:"Japón",code:"jp"},        groupLetter:"F", kickoff:"2026-06-14T16:00:00-04:00"},
+{id:"m32", type:"group", round:"Grupo F", date:"14 jun · 22:00", home:{id:"SWE",name:"Suecia",code:"se"},     away:{id:"TUN",name:"Túnez",code:"tn"},        groupLetter:"F", kickoff:"2026-06-14T22:00:00-04:00"},
+{id:"m33", type:"group", round:"Grupo F", date:"20 jun · 13:00", home:{id:"NED",name:"P. Bajos",code:"nl"},   away:{id:"SWE",name:"Suecia",code:"se"},        groupLetter:"F", kickoff:"2026-06-20T13:00:00-04:00"},
+{id:"m34", type:"group", round:"Grupo F", date:"21 jun · 00:00", home:{id:"TUN",name:"Túnez",code:"tn"},      away:{id:"JPN",name:"Japón",code:"jp"},        groupLetter:"F", kickoff:"2026-06-21T00:00:00-04:00"},
+{id:"m35", type:"group", round:"Grupo F", date:"25 jun · 19:00", home:{id:"JPN",name:"Japón",code:"jp"},      away:{id:"SWE",name:"Suecia",code:"se"},        groupLetter:"F", kickoff:"2026-06-25T19:00:00-04:00"},
+{id:"m36", type:"group", round:"Grupo F", date:"25 jun · 19:00", home:{id:"TUN",name:"Túnez",code:"tn"},      away:{id:"NED",name:"P. Bajos",code:"nl"},      groupLetter:"F", kickoff:"2026-06-25T19:00:00-04:00"},
+// ===== GRUPO G =====
+{id:"m37", type:"group", round:"Grupo G", date:"15 jun · 15:00", home:{id:"BEL",name:"Bélgica",code:"be"},    away:{id:"EGY",name:"Egipto",code:"eg"},       groupLetter:"G", kickoff:"2026-06-15T15:00:00-04:00"},
+{id:"m38", type:"group", round:"Grupo G", date:"15 jun · 21:00", home:{id:"IRN",name:"Irán",code:"ir"},       away:{id:"NZL",name:"N. Zelanda",code:"nz"},   groupLetter:"G", kickoff:"2026-06-15T21:00:00-04:00"},
+{id:"m39", type:"group", round:"Grupo G", date:"21 jun · 15:00", home:{id:"BEL",name:"Bélgica",code:"be"},    away:{id:"IRN",name:"Irán",code:"ir"},         groupLetter:"G", kickoff:"2026-06-21T15:00:00-04:00"},
+{id:"m40", type:"group", round:"Grupo G", date:"21 jun · 21:00", home:{id:"NZL",name:"N. Zelanda",code:"nz"}, away:{id:"EGY",name:"Egipto",code:"eg"},       groupLetter:"G", kickoff:"2026-06-21T21:00:00-04:00"},
+{id:"m41", type:"group", round:"Grupo G", date:"26 jun · 23:00", home:{id:"EGY",name:"Egipto",code:"eg"},     away:{id:"IRN",name:"Irán",code:"ir"},         groupLetter:"G", kickoff:"2026-06-26T23:00:00-04:00"},
+{id:"m42", type:"group", round:"Grupo G", date:"26 jun · 23:00", home:{id:"NZL",name:"N. Zelanda",code:"nz"}, away:{id:"BEL",name:"Bélgica",code:"be"},      groupLetter:"G", kickoff:"2026-06-26T23:00:00-04:00"},
+// ===== GRUPO H =====
+{id:"m43", type:"group", round:"Grupo H", date:"15 jun · 12:00", home:{id:"ESP",name:"España",code:"es"},     away:{id:"CPV",name:"Cabo Verde",code:"cv"},   groupLetter:"H", kickoff:"2026-06-15T12:00:00-04:00"},
+{id:"m44", type:"group", round:"Grupo H", date:"15 jun · 18:00", home:{id:"KSA",name:"A. Saudita",code:"sa"}, away:{id:"URU",name:"Uruguay",code:"uy"},      groupLetter:"H", kickoff:"2026-06-15T18:00:00-04:00"},
+{id:"m45", type:"group", round:"Grupo H", date:"21 jun · 12:00", home:{id:"ESP",name:"España",code:"es"},     away:{id:"KSA",name:"A. Saudita",code:"sa"},   groupLetter:"H", kickoff:"2026-06-21T12:00:00-04:00"},
+{id:"m46", type:"group", round:"Grupo H", date:"21 jun · 18:00", home:{id:"URU",name:"Uruguay",code:"uy"},    away:{id:"CPV",name:"Cabo Verde",code:"cv"},   groupLetter:"H", kickoff:"2026-06-21T18:00:00-04:00"},
+{id:"m47", type:"group", round:"Grupo H", date:"26 jun · 20:00", home:{id:"CPV",name:"Cabo Verde",code:"cv"}, away:{id:"KSA",name:"A. Saudita",code:"sa"},   groupLetter:"H", kickoff:"2026-06-26T20:00:00-04:00"},
+{id:"m48", type:"group", round:"Grupo H", date:"26 jun · 20:00", home:{id:"URU",name:"Uruguay",code:"uy"},    away:{id:"ESP",name:"España",code:"es"},       groupLetter:"H", kickoff:"2026-06-26T20:00:00-04:00"},
+// ===== GRUPO I =====
+{id:"m49", type:"group", round:"Grupo I", date:"16 jun · 15:00", home:{id:"FRA",name:"Francia",code:"fr"},    away:{id:"SEN",name:"Senegal",code:"sn"},      groupLetter:"I", kickoff:"2026-06-16T15:00:00-04:00"},
+{id:"m50", type:"group", round:"Grupo I", date:"16 jun · 18:00", home:{id:"IRQ",name:"Irak",code:"iq"},       away:{id:"NOR",name:"Noruega",code:"no"},      groupLetter:"I", kickoff:"2026-06-16T18:00:00-04:00"},
+{id:"m51", type:"group", round:"Grupo I", date:"22 jun · 17:00", home:{id:"FRA",name:"Francia",code:"fr"},    away:{id:"IRQ",name:"Irak",code:"iq"},         groupLetter:"I", kickoff:"2026-06-22T17:00:00-04:00"},
+{id:"m52", type:"group", round:"Grupo I", date:"22 jun · 20:00", home:{id:"NOR",name:"Noruega",code:"no"},    away:{id:"SEN",name:"Senegal",code:"sn"},      groupLetter:"I", kickoff:"2026-06-22T20:00:00-04:00"},
+{id:"m53", type:"group", round:"Grupo I", date:"26 jun · 15:00", home:{id:"NOR",name:"Noruega",code:"no"},    away:{id:"FRA",name:"Francia",code:"fr"},      groupLetter:"I", kickoff:"2026-06-26T15:00:00-04:00"},
+{id:"m54", type:"group", round:"Grupo I", date:"26 jun · 15:00", home:{id:"SEN",name:"Senegal",code:"sn"},    away:{id:"IRQ",name:"Irak",code:"iq"},         groupLetter:"I", kickoff:"2026-06-26T15:00:00-04:00"},
+// ===== GRUPO J =====
+{id:"m55", type:"group", round:"Grupo J", date:"16 jun · 21:00", home:{id:"ARG",name:"Argentina",code:"ar"},  away:{id:"ALG",name:"Argelia",code:"dz"},      groupLetter:"J", kickoff:"2026-06-16T21:00:00-04:00"},
+{id:"m56", type:"group", round:"Grupo J", date:"17 jun · 00:00", home:{id:"AUT",name:"Austria",code:"at"},    away:{id:"JOR",name:"Jordania",code:"jo"},     groupLetter:"J", kickoff:"2026-06-17T00:00:00-04:00"},
+{id:"m57", type:"group", round:"Grupo J", date:"22 jun · 13:00", home:{id:"ARG",name:"Argentina",code:"ar"},  away:{id:"AUT",name:"Austria",code:"at"},      groupLetter:"J", kickoff:"2026-06-22T13:00:00-04:00"},
+{id:"m58", type:"group", round:"Grupo J", date:"22 jun · 23:00", home:{id:"JOR",name:"Jordania",code:"jo"},   away:{id:"ALG",name:"Argelia",code:"dz"},      groupLetter:"J", kickoff:"2026-06-22T23:00:00-04:00"},
+{id:"m59", type:"group", round:"Grupo J", date:"27 jun · 22:00", home:{id:"ALG",name:"Argelia",code:"dz"},    away:{id:"AUT",name:"Austria",code:"at"},      groupLetter:"J", kickoff:"2026-06-27T22:00:00-04:00"},
+{id:"m60", type:"group", round:"Grupo J", date:"27 jun · 22:00", home:{id:"JOR",name:"Jordania",code:"jo"},   away:{id:"ARG",name:"Argentina",code:"ar"},    groupLetter:"J", kickoff:"2026-06-27T22:00:00-04:00"},
+// ===== GRUPO K =====
+{id:"m61", type:"group", round:"Grupo K", date:"17 jun · 13:00", home:{id:"POR",name:"Portugal",code:"pt"},   away:{id:"COD",name:"RD Congo",code:"cd"},     groupLetter:"K", kickoff:"2026-06-17T13:00:00-04:00"},
+{id:"m62", type:"group", round:"Grupo K", date:"17 jun · 22:00", home:{id:"UZB",name:"Uzbekistán",code:"uz"}, away:{id:"COL",name:"Colombia",code:"co"},     groupLetter:"K", kickoff:"2026-06-17T22:00:00-04:00"},
+{id:"m63", type:"group", round:"Grupo K", date:"23 jun · 13:00", home:{id:"POR",name:"Portugal",code:"pt"},   away:{id:"UZB",name:"Uzbekistán",code:"uz"},   groupLetter:"K", kickoff:"2026-06-23T13:00:00-04:00"},
+{id:"m64", type:"group", round:"Grupo K", date:"23 jun · 22:00", home:{id:"COL",name:"Colombia",code:"co"},   away:{id:"COD",name:"RD Congo",code:"cd"},     groupLetter:"K", kickoff:"2026-06-23T22:00:00-04:00"},
+{id:"m65", type:"group", round:"Grupo K", date:"27 jun · 19:30", home:{id:"COL",name:"Colombia",code:"co"},   away:{id:"POR",name:"Portugal",code:"pt"},     groupLetter:"K", kickoff:"2026-06-27T19:30:00-04:00"},
+{id:"m66", type:"group", round:"Grupo K", date:"27 jun · 19:30", home:{id:"COD",name:"RD Congo",code:"cd"},   away:{id:"UZB",name:"Uzbekistán",code:"uz"},   groupLetter:"K", kickoff:"2026-06-27T19:30:00-04:00"},
+// ===== GRUPO L =====
+{id:"m67", type:"group", round:"Grupo L", date:"17 jun · 16:00", home:{id:"ENG",name:"Inglaterra",code:"gb-eng"},away:{id:"CRO",name:"Croacia",code:"hr"},  groupLetter:"L", kickoff:"2026-06-17T16:00:00-04:00"},
+{id:"m68", type:"group", round:"Grupo L", date:"17 jun · 19:00", home:{id:"GHA",name:"Ghana",code:"gh"},      away:{id:"PAN",name:"Panamá",code:"pa"},       groupLetter:"L", kickoff:"2026-06-17T19:00:00-04:00"},
+{id:"m69", type:"group", round:"Grupo L", date:"23 jun · 16:00", home:{id:"ENG",name:"Inglaterra",code:"gb-eng"},away:{id:"GHA",name:"Ghana",code:"gh"},    groupLetter:"L", kickoff:"2026-06-23T16:00:00-04:00"},
+{id:"m70", type:"group", round:"Grupo L", date:"23 jun · 19:00", home:{id:"PAN",name:"Panamá",code:"pa"},     away:{id:"CRO",name:"Croacia",code:"hr"},      groupLetter:"L", kickoff:"2026-06-23T19:00:00-04:00"},
+{id:"m71", type:"group", round:"Grupo L", date:"27 jun · 17:00", home:{id:"PAN",name:"Panamá",code:"pa"},     away:{id:"ENG",name:"Inglaterra",code:"gb-eng"},groupLetter:"L", kickoff:"2026-06-27T17:00:00-04:00"},
+{id:"m72", type:"group", round:"Grupo L", date:"27 jun · 17:00", home:{id:"CRO",name:"Croacia",code:"hr"},    away:{id:"GHA",name:"Ghana",code:"gh"},        groupLetter:"L", kickoff:"2026-06-27T17:00:00-04:00"},
+
+// ===== 16AVOS (Round of 32) =====
+// home/away se rellenan dinámicamente con resolveKnockoutTeams()
+// Los slots de "3°" (mejor tercero) se asignan ordenando todos los 3ros por pts/DG/GF
+{id:"e73",  type:"knockout", round:"16avos", date:"28 jun · 15:00", homeSlot:["2","A"],  awaySlot:["2","B"],  kickoff:"2026-06-28T15:00:00-04:00"},
+{id:"e74",  type:"knockout", round:"16avos", date:"29 jun · 13:00", homeSlot:["1","E"],  awaySlot:["3",null], kickoff:"2026-06-29T13:00:00-04:00"},
+{id:"e75",  type:"knockout", round:"16avos", date:"29 jun · 21:00", homeSlot:["1","F"],  awaySlot:["2","C"],  kickoff:"2026-06-29T21:00:00-04:00"},
+{id:"e76",  type:"knockout", round:"16avos", date:"29 jun · 13:00", homeSlot:["1","C"],  awaySlot:["2","F"],  kickoff:"2026-06-29T13:00:00-04:00"},
+{id:"e77",  type:"knockout", round:"16avos", date:"30 jun · 17:00", homeSlot:["1","I"],  awaySlot:["3",null], kickoff:"2026-06-30T17:00:00-04:00"},
+{id:"e78",  type:"knockout", round:"16avos", date:"30 jun · 13:00", homeSlot:["2","E"],  awaySlot:["2","I"],  kickoff:"2026-06-30T13:00:00-04:00"},
+{id:"e79",  type:"knockout", round:"16avos", date:"30 jun · 21:00", homeSlot:["1","A"],  awaySlot:["3",null], kickoff:"2026-06-30T21:00:00-04:00"},
+{id:"e80",  type:"knockout", round:"16avos", date:"01 jul · 12:00", homeSlot:["1","L"],  awaySlot:["3",null], kickoff:"2026-07-01T12:00:00-04:00"},
+{id:"e81",  type:"knockout", round:"16avos", date:"01 jul · 20:00", homeSlot:["1","D"],  awaySlot:["3",null], kickoff:"2026-07-01T20:00:00-04:00"},
+{id:"e82",  type:"knockout", round:"16avos", date:"01 jul · 16:00", homeSlot:["1","G"],  awaySlot:["3",null], kickoff:"2026-07-01T16:00:00-04:00"},
+{id:"e83",  type:"knockout", round:"16avos", date:"02 jul · 19:00", homeSlot:["2","K"],  awaySlot:["2","L"],  kickoff:"2026-07-02T19:00:00-04:00"},
+{id:"e84",  type:"knockout", round:"16avos", date:"02 jul · 15:00", homeSlot:["1","H"],  awaySlot:["2","J"],  kickoff:"2026-07-02T15:00:00-04:00"},
+{id:"e85",  type:"knockout", round:"16avos", date:"02 jul · 23:00", homeSlot:["1","B"],  awaySlot:["3",null], kickoff:"2026-07-02T23:00:00-04:00"},
+{id:"e86",  type:"knockout", round:"16avos", date:"03 jul · 18:00", homeSlot:["1","J"],  awaySlot:["2","H"],  kickoff:"2026-07-03T18:00:00-04:00"},
+{id:"e87",  type:"knockout", round:"16avos", date:"03 jul · 23:30", homeSlot:["1","K"],  awaySlot:["3",null], kickoff:"2026-07-03T23:30:00-04:00"},
+{id:"e88",  type:"knockout", round:"16avos", date:"03 jul · 14:00", homeSlot:["2","D"],  awaySlot:["2","G"],  kickoff:"2026-07-03T14:00:00-04:00"},
+
+// ===== OCTAVOS =====
+{id:"e89",  type:"knockout", round:"Octavos", date:"04 jul · 17:00", homeSlot:["W","e74"], awaySlot:["W","e77"], kickoff:"2026-07-04T17:00:00-04:00"},
+{id:"e90",  type:"knockout", round:"Octavos", date:"04 jul · 13:00", homeSlot:["W","e73"], awaySlot:["W","e75"], kickoff:"2026-07-04T13:00:00-04:00"},
+{id:"e91",  type:"knockout", round:"Octavos", date:"05 jul · 16:00", homeSlot:["W","e76"], awaySlot:["W","e78"], kickoff:"2026-07-05T16:00:00-04:00"},
+{id:"e92",  type:"knockout", round:"Octavos", date:"05 jul · 20:00", homeSlot:["W","e79"], awaySlot:["W","e80"], kickoff:"2026-07-05T20:00:00-04:00"},
+{id:"e93",  type:"knockout", round:"Octavos", date:"06 jul · 15:00", homeSlot:["W","e83"], awaySlot:["W","e84"], kickoff:"2026-07-06T15:00:00-04:00"},
+{id:"e94",  type:"knockout", round:"Octavos", date:"06 jul · 20:00", homeSlot:["W","e81"], awaySlot:["W","e82"], kickoff:"2026-07-06T20:00:00-04:00"},
+{id:"e95",  type:"knockout", round:"Octavos", date:"07 jul · 14:00", homeSlot:["W","e86"], awaySlot:["W","e88"], kickoff:"2026-07-07T14:00:00-04:00"},
+{id:"e96",  type:"knockout", round:"Octavos", date:"07 jul · 16:00", homeSlot:["W","e85"], awaySlot:["W","e87"], kickoff:"2026-07-07T16:00:00-04:00"},
+
+// ===== CUARTOS =====
+{id:"e97",  type:"knockout", round:"Cuartos", date:"09 jul · 16:00", homeSlot:["W","e89"], awaySlot:["W","e90"], kickoff:"2026-07-09T16:00:00-04:00"},
+{id:"e98",  type:"knockout", round:"Cuartos", date:"10 jul · 15:00", homeSlot:["W","e93"], awaySlot:["W","e94"], kickoff:"2026-07-10T15:00:00-04:00"},
+{id:"e99",  type:"knockout", round:"Cuartos", date:"11 jul · 17:00", homeSlot:["W","e91"], awaySlot:["W","e92"], kickoff:"2026-07-11T17:00:00-04:00"},
+{id:"e100", type:"knockout", round:"Cuartos", date:"11 jul · 21:00", homeSlot:["W","e95"], awaySlot:["W","e96"], kickoff:"2026-07-11T21:00:00-04:00"},
+
+// ===== SEMIFINALES =====
+{id:"e101", type:"knockout", round:"Semifinales", date:"14 jul · 15:00", homeSlot:["W","e97"],  awaySlot:["W","e98"],  kickoff:"2026-07-14T15:00:00-04:00"},
+{id:"e102", type:"knockout", round:"Semifinales", date:"15 jul · 15:00", homeSlot:["W","e99"],  awaySlot:["W","e100"], kickoff:"2026-07-15T15:00:00-04:00"},
+
+// ===== 3ER LUGAR Y FINAL =====
+{id:"e103", type:"knockout", round:"3er Lugar", date:"18 jul · 17:00", homeSlot:["L","e101"], awaySlot:["L","e102"], kickoff:"2026-07-18T17:00:00-04:00"},
+{id:"e104", type:"knockout", round:"Final",     date:"19 jul · 15:00", homeSlot:["W","e101"], awaySlot:["W","e102"], kickoff:"2026-07-19T15:00:00-04:00"}
+];
+
+
+let currentUser=null;
+let currentGroupRound="Grupo A",currentKnockoutRound="16avos",currentAdminRound="Grupo A",currentRealGroupTab="A";
+
+// Storage
+let dbState={};
+Object.keys(localStorage).forEach(k=>{if(k.startsWith(PREFIX)){try{dbState[k]=JSON.parse(localStorage.getItem(k));}catch(e){}}});
+function load(k){return dbState[PREFIX+k]||null;}
+async function save(k,v){
+  dbState[PREFIX+k]=v;localStorage.setItem(PREFIX+k,JSON.stringify(v));
+  if(USE_SUPABASE){
+    try{
+      const res=await fetch(`${SUPABASE_URL}/rest/v1/mundial_data?id=eq.${PREFIX+k}&select=data`,{headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":`Bearer ${SUPABASE_ANON_KEY}`}});
+      if(res.ok){const j=await res.json();if(j&&j.length>0&&typeof v==='object'&&!Array.isArray(v)&&v!==null)v={...j[0].data,...v};}
+      await fetch(`${SUPABASE_URL}/rest/v1/mundial_data`,{method:"POST",headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":`Bearer ${SUPABASE_ANON_KEY}`,"Content-Type":"application/json","Prefer":"resolution=merge-duplicates"},body:JSON.stringify({id:PREFIX+k,data:v})});
+      dbState[PREFIX+k]=v;localStorage.setItem(PREFIX+k,JSON.stringify(v));
+    }catch(e){}
+  }
+}
+function getRealResults(){return load("real")||{matches:{},winners:{},groups:{}};}
+
+async function syncDatabase(){
+  if(!USE_SUPABASE)return;
+  try{
+    const r=await fetch(`${SUPABASE_URL}/rest/v1/mundial_data?select=*`,{headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":`Bearer ${SUPABASE_ANON_KEY}`}});
+    if(r.ok){const data=await r.json();if(Array.isArray(data)){let upd=false;data.forEach(row=>{const ls=JSON.stringify(dbState[row.id]),rs=JSON.stringify(row.data);if(ls!==rs){dbState[row.id]=row.data;localStorage.setItem(row.id,rs);upd=true;}});if(upd){renderRanking();}}}
+  }catch(e){}
+}
+if(USE_SUPABASE){syncDatabase();setInterval(syncDatabase,3000);}
+
+// ─── Sync resultados FT desde football-data.org ──────────────────────────────
+// IMPORTANTE: este endpoint devuelve TODOS los partidos finalizados del Mundial
+// (fase de grupos Y eliminatoria) en una sola llamada. Para poder emparejar los
+// partidos de eliminatoria (16avos, octavos, cuartos, semis, final) primero hay
+// que resolver quién juega cada cruce (resolveKnockoutTeams), porque esos partidos
+// no tienen equipos fijos hasta que se conocen los resultados previos.
+async function syncFromAPI(){
+  if(!USE_API||!FOOTBALL_DATA_KEY||FOOTBALL_DATA_KEY==="TU_KEY_AQUI") return;
+  try{
+    const res = await fetch(
+      `https://api.football-data.org/v4/competitions/WC/matches?status=FINISHED`,
+      { headers: { "X-Auth-Token": FOOTBALL_DATA_KEY } }
+    );
+    if(!res.ok){
+      console.warn("football-data API error:", res.status);
+      setApiStatus(false, res.status===403?"Token inválido o sin acceso":`Error ${res.status}`);
+      return;
+    }
+    const data = await res.json();
+    setApiStatus(true);
+    if(!data?.matches?.length) return;
+
+    // Resolver los cruces de eliminatoria ANTES de intentar emparejar,
+    // para que los partidos de 16avos+ ya tengan m.home.id / m.away.id reales.
+    resolveKnockoutTeams();
+
+    const real = getRealResults();
+    let changed = false;
+
+    data.matches.forEach(fx => {
+      const gh = fx.score?.fullTime?.home;
+      const ga = fx.score?.fullTime?.away;
+      if(gh === null || ga === null || gh === undefined || ga === undefined) return;
+
+      // Convertir TLA codes de la API a IDs internos
+      const hTla = fx.homeTeam?.tla;
+      const aTla = fx.awayTeam?.tla;
+      const hId  = TLA_TO_ID[hTla] || hTla;
+      const aId  = TLA_TO_ID[aTla] || aTla;
+
+      // Buscar el partido por IDs internos — fase de grupos Y eliminatoria.
+      // En eliminatoria, home/away ya están resueltos dinámicamente arriba.
+      const match = MATCHES.find(m =>
+        m.home?.id === hId && m.away?.id === aId
+      );
+      if(!match) return;
+
+      // Solo actualizar si cambió
+      const prev = real.matches[match.id];
+      if(!prev || prev.home !== gh || prev.away !== ga){
+        real.matches[match.id] = { home: gh, away: ga };
+        changed = true;
+      }
+    });
+
+    if(changed){
+      await save("real", real);
+      // Tras guardar resultados nuevos, puede haberse desbloqueado el
+      // siguiente cruce de eliminatoria → volver a resolver equipos.
+      resolveKnockoutTeams();
+      renderRanking();
+      // Refrescar vista activa
+      const pPage = document.getElementById("page-partidos");
+      const ePage = document.getElementById("page-eliminatorias");
+      if(pPage && pPage.classList.contains("active")) renderPartidos();
+      if(ePage && ePage.classList.contains("active")) renderPartidos();
+    }
+  } catch(e){
+    console.warn("syncFromAPI error:", e);
+    setApiStatus(false, "Sin conexión con la API");
+  }
+}
+
+// ─── Indicador visual de estado de la API (banda en la página Ranking) ──────
+// Solo visible para el admin. Los demás usuarios no necesitan ver esto:
+// si hay un problema con la API, el admin ya lo sabe y carga los resultados
+// manualmente desde el panel Admin, sin que el resto de la familia se preocupe.
+function setApiStatus(ok, msg){
+  const bar = document.getElementById("api-status");
+  const dot = document.getElementById("api-dot");
+  const txt = document.getElementById("api-msg");
+  if(!bar||!dot||!txt) return;
+  if(!currentUser || !currentUser.isAdmin){ bar.classList.add("hidden"); return; }
+  bar.classList.remove("hidden");
+  if(ok){
+    dot.className = "api-dot ok";
+    txt.textContent = "API conectada · resultados automáticos (solo tú ves este aviso)";
+  } else {
+    dot.className = "api-dot error";
+    txt.textContent = "⚠️ API sin conexión" + (msg?` (${msg})`:"") + " · carga resultados manualmente en Admin (solo tú ves este aviso)";
+  }
+}
+
+if(USE_API){ syncFromAPI(); setInterval(syncFromAPI, REFRESH_INTERVAL); }
+
+
+// ============================================================
+// CÁLCULO DE STANDINGS DE GRUPO (reutilizable)
+// Retorna array ordenado de {teamId, pts, gf, gc, dg, pj, g, e, p}
+// ============================================================
+function calcGroupStandings(groupLetter){
+  const teams = GROUPS[groupLetter];
+  if(!teams) return [];
+  const real = getRealResults();
+  const stats = {};
+  teams.forEach(t => { stats[t.id] = {pj:0, g:0, e:0, p:0, gf:0, gc:0, pts:0}; });
+
+  MATCHES.filter(m => m.groupLetter === groupLetter && real.matches[m.id]).forEach(m => {
+    const rs = real.matches[m.id];
+    const rh = parseInt(rs.home), ra = parseInt(rs.away);
+    const hId = m.home.id, aId = m.away.id;
+    if(!stats[hId] || !stats[aId]) return;
+    stats[hId].pj++; stats[aId].pj++;
+    stats[hId].gf += rh; stats[hId].gc += ra;
+    stats[aId].gf += ra; stats[aId].gc += rh;
+    if(rh > ra){       stats[hId].g++; stats[hId].pts += 3; stats[aId].p++; }
+    else if(ra > rh){  stats[aId].g++; stats[aId].pts += 3; stats[hId].p++; }
+    else {             stats[hId].e++; stats[hId].pts++; stats[aId].e++; stats[aId].pts++; }
+  });
+
+  return teams
+    .map(t => ({ ...stats[t.id], teamId: t.id, group: groupLetter }))
+    .sort((a, b) => {
+      if(b.pts !== a.pts) return b.pts - a.pts;
+      const dA = a.gf - a.gc, dB = b.gf - b.gc;
+      if(dB !== dA) return dB - dA;
+      return b.gf - a.gf;
+    });
+}
+
+// ─── Verifica si un grupo ya terminó todos sus partidos ──────────────────────
+function groupIsComplete(groupLetter){
+  const real = getRealResults();
+  const groupMatches = MATCHES.filter(m => m.groupLetter === groupLetter);
+  return groupMatches.every(m => !!real.matches[m.id]);
+}
+
+// ============================================================
+// RESOLVER EQUIPOS PARA FASE ELIMINATORIA
+// Calcula quién clasifica de cada grupo y llena los slots
+// de home/away en los partidos de 16avos en adelante
+// ============================================================
+function resolveKnockoutTeams(){
+  const real = getRealResults();
+
+  // 1. Standings de cada grupo (solo si el grupo está completo)
+  const standings = {};  // { "A": [{teamId, pts, gf, gc, ...}], ... }
+  Object.keys(GROUPS).forEach(g => {
+    if(groupIsComplete(g)){
+      standings[g] = calcGroupStandings(g);
+    }
+  });
+
+  // 2. Mejores terceros: tomar el 3° de cada grupo completado,
+  //    ordenarlos por pts → DG → GF, tomar los 8 mejores
+  const allThirds = [];
+  Object.keys(standings).forEach(g => {
+    if(standings[g].length >= 3){
+      allThirds.push({ ...standings[g][2], group: g });
+    }
+  });
+  allThirds.sort((a, b) => {
+    if(b.pts !== a.pts) return b.pts - a.pts;
+    const dA = a.gf - a.gc, dB = b.gf - b.gc;
+    if(dB !== dA) return dB - dA;
+    return b.gf - a.gf;
+  });
+  const best8thirds = allThirds.slice(0, 8).map(t => t.teamId);
+
+  // 3. Cola de mejores terceros para asignar a los slots ["3", null]
+  const thirdsQueue = [...best8thirds];
+
+  // 4. Función que resuelve un slot ["pos", "grupo"] o ["W"/"L", "matchId"]
+  const resolvedCache = {};
+  function resolveSlot(slot){
+    if(!slot) return null;
+    const [type, ref] = slot;
+
+    if(type === "1" || type === "2"){
+      // 1° o 2° de un grupo
+      const g = ref;
+      if(!standings[g]) return null;
+      const pos = parseInt(type) - 1;
+      const entry = standings[g][pos];
+      if(!entry) return null;
+      return getTeam(entry.teamId);
+    }
+
+    if(type === "3"){
+      // Siguiente mejor tercero de la cola (en orden)
+      // NOTA: Los slots de 3° se asignan en orden de partido (e74, e77, e79, e80, e81, e82, e85, e87)
+      // La asignación exacta depende de qué grupos clasificaron, pero para mostrar el bracket
+      // usamos la cola ordenada
+      return null; // Se maneja abajo con thirdsQueue
+    }
+
+    if(type === "W" || type === "L"){
+      // Ganador o perdedor de un partido anterior
+      const prevMatch = MATCHES.find(m => m.id === ref);
+      if(!prevMatch) return null;
+      const rs = real.matches[ref];
+      if(!rs) return null;
+      const rh = parseInt(rs.home), ra = parseInt(rs.away);
+      const homeTeam = resolvedCache[ref]?.home || prevMatch.home || null;
+      const awayTeam = resolvedCache[ref]?.away || prevMatch.away || null;
+      if(!homeTeam || !awayTeam) return null;
+      if(type === "W"){
+        if(rh > ra) return homeTeam;
+        if(ra > rh) return awayTeam;
+        return null; // empate en eliminatoria no debería pasar (son tiempos extra/penales)
+      } else {
+        if(rh > ra) return awayTeam;
+        if(ra > rh) return homeTeam;
+        return null;
+      }
+    }
+
+    return null;
+  }
+
+  // 5. Asignar terceros en orden a los partidos con slot ["3", null]
+  //    Los 8 partidos con "3" son: e74, e77, e79, e80, e81, e82, e85, e87 (en ese orden)
+  const thirdSlotMatches = MATCHES.filter(m =>
+    m.type === "knockout" && m.round === "16avos" &&
+    (
+      (m.homeSlot && m.homeSlot[0] === "3") ||
+      (m.awaySlot && m.awaySlot[0] === "3")
+    )
+  );
+  let thirdsIdx = 0;
+
+  // 6. Resolver y cachear cada partido knockout
+  MATCHES.filter(m => m.type === "knockout").forEach(m => {
+    let homeTeam = null, awayTeam = null;
+
+    // Resolver home
+    if(m.homeSlot){
+      if(m.homeSlot[0] === "3"){
+        homeTeam = thirdsIdx < best8thirds.length ? getTeam(best8thirds[thirdsIdx++]) : null;
+      } else {
+        homeTeam = resolveSlot(m.homeSlot);
+      }
+    }
+
+    // Resolver away
+    if(m.awaySlot){
+      if(m.awaySlot[0] === "3"){
+        awayTeam = thirdsIdx < best8thirds.length ? getTeam(best8thirds[thirdsIdx++]) : null;
+      } else {
+        awayTeam = resolveSlot(m.awaySlot);
+      }
+    }
+
+    // Asignar al match para que renderML lo use
+    m.home = homeTeam || { id: m.homeSlot ? slotLabel(m.homeSlot) : "?", name: m.homeSlot ? slotLabel(m.homeSlot) : "Por determinar", code: null };
+    m.away = awayTeam || { id: m.awaySlot ? slotLabel(m.awaySlot) : "?", name: m.awaySlot ? slotLabel(m.awaySlot) : "Por determinar", code: null };
+
+    resolvedCache[m.id] = { home: m.home, away: m.away };
+  });
+}
+
+function slotLabel(slot){
+  if(!slot) return "?";
+  const [type, ref] = slot;
+  if(type === "1") return `1° Grupo ${ref}`;
+  if(type === "2") return `2° Grupo ${ref}`;
+  if(type === "3") return `Mejor 3°`;
+  if(type === "W") return `G. ${ref}`;
+  if(type === "L") return `Per. ${ref}`;
+  return "?";
+}
+
+
+// ─── Login / Register ────────────────────────────────────────────────────────
+function doRegister(){
+  const name=document.getElementById("reg-name").value.trim();
+  const user=document.getElementById("reg-user").value.trim().toLowerCase().replace(/\s/g,"_");
+  const pass=document.getElementById("reg-pass").value;
+  const err=document.getElementById("reg-error");err.classList.add("hidden");
+  if(!name||!user||pass.length<4){err.textContent="Completa todos los campos (contraseña mín. 4 caracteres)";err.classList.remove("hidden");return}
+  let users=load("users")||{};
+  if(users[user]){err.textContent="El usuario ya existe";err.classList.remove("hidden");return}
+  users[user]={name,pass};save("users",users);
+  currentUser={id:user,name,isAdmin:false};showApp();
+}
+function doLogin(){
+  const user=document.getElementById("login-user").value.trim().toLowerCase();
+  const pass=document.getElementById("login-pass").value;
+  const err=document.getElementById("login-error");err.classList.add("hidden");
+  if(user===ADMIN_USER&&pass===ADMIN_PASS){currentUser={id:user,name:"Admin",isAdmin:true};showApp();return}
+  const users=load("users")||{};
+  if(users[user]&&users[user].pass===pass){currentUser={id:user,name:users[user].name,isAdmin:false};showApp();}
+  else{err.textContent="Usuario o contraseña incorrectos";err.classList.remove("hidden");}
+}
+function toggleForm(){
+  document.getElementById("form-login").classList.toggle("hidden");
+  document.getElementById("form-register").classList.toggle("hidden");
+}
+function showApp(){
+  document.getElementById("page-login").style.display="none";
+  document.getElementById("main-pages").classList.remove("hidden");
+  document.getElementById("nav-user-info").innerHTML=`<span>${currentUser.name}</span> <a onclick="location.reload()" style="cursor:pointer;color:#94a3b8;margin-left:8px;font-size:12px">Salir</a>`;
+  if(currentUser.isAdmin)document.getElementById("admin-tab").classList.remove("hidden");
+  // Resolver equipos de fase eliminatoria al iniciar
+  resolveKnockoutTeams();
+  syncFromAPI();
+  goTabDirect('ranking');
+}
+function goTab(tab){
+  document.querySelectorAll(".nav-tab").forEach(t=>t.classList.remove("active"));
+  if(event&&event.target)event.target.classList.add("active");
+  goTabDirect(tab);
+}
+function goTabDirect(tab){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById("page-"+tab).classList.add("active");
+  if(tab==="ranking")       renderRanking();
+  if(tab==="pronostico")    renderPron();
+  if(tab==="grupos")        renderGrupos();
+  if(tab==="partidos"||tab==="eliminatorias"){ resolveKnockoutTeams(); renderPartidos(); }
+  if(tab==="admin"&&currentUser.isAdmin)      renderAdmin();
+}
+
+// ─── Cálculo de puntos por partido ──────────────────────────────────────────
+function matchPts(ph, pa, rh, ra){
+  const exacto = ph===rh && pa===ra;
+  const tipoR = rh===ra?"empate":rh>ra?"local":"visita";
+  const tipoP = ph===pa?"empate":ph>pa?"local":"visita";
+  const tipoOk = tipoR===tipoP;
+  if(exacto && tipoOk) return {pts:8, tipo:"exacto"};
+  if(tipoOk) return {pts:3, tipo:"ganador"};
+  return {pts:0, tipo:"cero"};
+}
+
+// ─── Cálculo total de puntos de un usuario ──────────────────────────────────
+function calcPoints(userId){
+  let pts = 0;
+  const real = getRealResults();
+
+  // 1. Puntos de podio final
+  const myPod = load("preds")?.[userId];
+  if(myPod && real.winners && real.winners[1]){
+    if(myPod[1] === real.winners[1]) pts += 10;
+    if(myPod[2] === real.winners[2]) pts += 10;
+    if(myPod[3] === real.winners[3]) pts += 10;
+  }
+
+  // 2. Puntos de partidos
+  const mpreds = load("match_preds")?.[userId] || {};
+  if(real.matches){
+    Object.keys(real.matches).forEach(mid => {
+      const rs = real.matches[mid];
+      const mp = mpreds[mid];
+      if(rs && mp && mp.h !== ""){
+        const r = matchPts(parseInt(mp.h), parseInt(mp.a), parseInt(rs.home), parseInt(rs.away));
+        pts += r.pts;
+      }
+    });
+  }
+
+  // 3. Puntos de clasificados por grupo
+  const gpreds = load("group_preds")?.[userId] || {};
+  Object.keys(GROUPS).forEach(g => {
+    const pred = gpreds[g] || {};
+    // Standings reales del grupo (solo si está completo)
+    if(!groupIsComplete(g)) return;
+    const stand = calcGroupStandings(g);
+    if(!stand.length) return;
+
+    const real1 = stand[0]?.teamId;
+    const real2 = stand[1]?.teamId;
+    const real3 = stand[2]?.teamId;
+
+    // Puntos 1° y 2° lugar
+    [1, 2].forEach(pos => {
+      const predTeam = pred[pos];
+      if(!predTeam) return;
+      if(predTeam === (pos === 1 ? real1 : real2)) {
+        pts += 10; // posición exacta
+      } else if(predTeam === real1 || predTeam === real2) {
+        pts += 3;  // clasificó pero en diferente posición
+      }
+    });
+
+    // Puntos por mejor 3° (el pred[3] del usuario)
+    // Solo puntúa si todos los grupos están completos (para saber los 8 mejores)
+  });
+
+  // 4. Puntos de los 8 mejores terceros
+  // Calcular los mejores terceros reales (solo grupos completados)
+  const allThirds = [];
+  Object.keys(GROUPS).forEach(g => {
+    if(!groupIsComplete(g)) return;
+    const stand = calcGroupStandings(g);
+    if(stand.length >= 3) allThirds.push({ ...stand[2], group: g });
+  });
+
+  // Solo puntuar terceros si hay datos suficientes (al menos algunos grupos completados)
+  if(allThirds.length > 0){
+    allThirds.sort((a,b) => {
+      if(b.pts !== a.pts) return b.pts - a.pts;
+      const dA = a.gf - a.gc, dB = b.gf - b.gc;
+      if(dB !== dA) return dB - dA;
+      return b.gf - a.gf;
+    });
+    // Los IDs de los 8 mejores terceros reales (o menos si no todos los grupos terminaron)
+    const best8 = allThirds.slice(0, 8).map(t => t.teamId);
+
+    Object.keys(GROUPS).forEach(g => {
+      const pred = gpreds[g] || {};
+      const predThird = pred[3]; // el mejor 3° que el usuario eligió de este grupo
+      if(!predThird) return;
+
+      // ¿Está ese equipo entre los mejores 3ros reales?
+      if(best8.includes(predThird)){
+        pts += 3; // clasificó como mejor 3° (no hay posición exacta para terceros)
+      }
+    });
+  }
+
+  return pts;
+}
+
+// ─── Puntos de UNA selección de Clasificados por Grupo (para mostrarlos en pantalla) ──
+// pos: 1 (1° lugar), 2 (2° lugar) o 3 (mejor tercero)
+// Devuelve { pts, status } donde status es "exacto" | "parcial" | "fallo" | "pendiente"
+function groupPickPts(g, pos, teamId){
+  if(!teamId) return {pts:0, status:"pendiente"};
+  if(!groupIsComplete(g)) return {pts:null, status:"pendiente"}; // grupo aún sin terminar
+
+  const stand = calcGroupStandings(g);
+  if(!stand.length) return {pts:null, status:"pendiente"};
+  const real1 = stand[0]?.teamId, real2 = stand[1]?.teamId;
+
+  if(pos===1 || pos===2){
+    const realPos = pos===1?real1:real2;
+    if(teamId===realPos) return {pts:10, status:"exacto"};
+    if(teamId===real1 || teamId===real2) return {pts:3, status:"parcial"};
+    return {pts:0, status:"fallo"};
+  }
+
+  // pos === 3 → mejor tercero, depende de los 8 mejores terceros de TODO el Mundial,
+  // así que solo se puede calcular si todos los grupos ya terminaron.
+  const allGroupsComplete = Object.keys(GROUPS).every(gg=>groupIsComplete(gg));
+  if(!allGroupsComplete) return {pts:null, status:"pendiente"};
+
+  const allThirds = [];
+  Object.keys(GROUPS).forEach(gg => {
+    const st = calcGroupStandings(gg);
+    if(st.length >= 3) allThirds.push({...st[2], group:gg});
+  });
+  allThirds.sort((a,b)=>{
+    if(b.pts !== a.pts) return b.pts - a.pts;
+    const dA=a.gf-a.gc, dB=b.gf-b.gc;
+    if(dB!==dA) return dB-dA;
+    return b.gf-a.gf;
+  });
+  const best8 = allThirds.slice(0,8).map(t=>t.teamId);
+  return best8.includes(teamId) ? {pts:3, status:"exacto"} : {pts:0, status:"fallo"};
+}
+
+function renderRanking(){
+  const users=load("users")||{};
+  const all=Object.keys(users).map(uid=>({id:uid,name:users[uid].name,pts:calcPoints(uid)})).sort((a,b)=>b.pts-a.pts);
+  const el=document.getElementById("ranking-list");
+  if(!all.length){el.innerHTML=`<div style="padding:32px;text-align:center;color:var(--muted)">¡Sin participantes aún!</div>`;return}
+  el.innerHTML=all.map((u,i)=>{
+    const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":`<span style="color:var(--muted)">${i+1}</span>`;
+    const isMe=u.id===currentUser.id;
+    return `<div class="rank-row ${isMe?"is-me":""}">
+      <div class="rank-num">${medal}</div>
+      <div style="flex:1"><div style="font-weight:500;font-size:15px">${u.name}${isMe?`<span class="me-badge">TÚ</span>`:""}</div></div>
+      <div style="text-align:right"><div class="rank-pts">${u.pts}</div><div class="rank-lbl">puntos</div></div>
+    </div>`;
+  }).join("");
+}
+
+let pronSel={1:null,2:null,3:null};
+function renderPron(){
+  const preds=load("preds")||{};const closed=isPronClosed();const tl=timeLeft();
+  if(preds[currentUser.id]){
+    document.getElementById("pron-form").classList.add("hidden");
+    document.getElementById("pron-locked-view").classList.remove("hidden");
+    const p=preds[currentUser.id];const t=id=>QUALIFIED_TEAMS.find(x=>x.id===id)||{name:id,code:null};
+    const real=getRealResults();
+    const podioBadge=(pos)=>{
+      if(!real.winners || !real.winners[pos]) return `<span class="badge badge-gray" style="margin-left:auto">Pendiente</span>`;
+      const acierto = p[pos]===real.winners[pos];
+      return acierto
+        ? `<span class="badge badge-green" style="margin-left:auto">+10 pts</span>`
+        : `<span class="badge badge-red" style="margin-left:auto">0 pts</span>`;
+    };
+    document.getElementById("pron-locked-content").innerHTML=`
+      <div class="prog-locked"><span style="font-size:22px;margin-right:8px">🥇</span>${getFlagHtml(t(p[1]).code)}<span style="font-size:15px;font-weight:600;margin-left:8px">${t(p[1]).name}</span>${podioBadge(1)}</div>
+      <div class="prog-locked"><span style="font-size:22px;margin-right:8px">🥈</span>${getFlagHtml(t(p[2]).code)}<span style="font-size:15px;font-weight:600;margin-left:8px">${t(p[2]).name}</span>${podioBadge(2)}</div>
+      <div class="prog-locked"><span style="font-size:22px;margin-right:8px">🥉</span>${getFlagHtml(t(p[3]).code)}<span style="font-size:15px;font-weight:600;margin-left:8px">${t(p[3]).name}</span>${podioBadge(3)}</div>`;
+    return;
+  }
+  if(closed){
+    document.getElementById("pron-form").classList.add("hidden");
+    document.getElementById("pron-locked-view").classList.remove("hidden");
+    document.getElementById("pron-locked-content").innerHTML=`<div class="locked-banner">🔒 El plazo para ingresar tu Pronóstico Final ya cerró.</div>`;
+    return;
+  }
+  document.getElementById("pron-locked-view").classList.add("hidden");
+  document.getElementById("pron-form").classList.remove("hidden");
+  let cdEl=document.getElementById("pron-cd");
+  if(!cdEl){cdEl=document.createElement("div");cdEl.id="pron-cd";const f=document.getElementById("pron-form");f.insertBefore(cdEl,f.firstChild);}
+  cdEl.innerHTML=`<div class="countdown-banner">⏳ Cierra en <span class="countdown-val">${tl}</span>&nbsp;· 11 Jun · 14:00 hrs</div>`;
+  [1,2,3].forEach(pos=>{
+    document.getElementById("team-list-"+pos).innerHTML=QUALIFIED_TEAMS.map(t=>`
+      <div class="prog-team" id="pt_${pos}_${t.id}" onclick="selPron(${pos},'${t.id}')">
+        ${getFlagHtml(t.code)}<span class="name">${t.name}</span><span class="check">✓</span>
+      </div>`).join("");
+  });
+}
+function selPron(pos,tid){[1,2,3].forEach(p=>{if(pronSel[p]===tid)pronSel[p]=null});pronSel[pos]=tid;[1,2,3].forEach(p=>{QUALIFIED_TEAMS.forEach(t=>{let el=document.getElementById(`pt_${p}_${t.id}`);if(el)el.classList.toggle("selected",pronSel[p]===t.id)});});}
+function savePron(){
+  if(isPronClosed())return alert("⏰ El plazo ya cerró.");
+  if(!pronSel[1]||!pronSel[2]||!pronSel[3])return alert("Faltan selecciones");
+  if(!confirm("¿Fijar pronóstico? No podrás cambiarlo."))return;
+  let p=load("preds")||{};p[currentUser.id]=pronSel;save("preds",p);renderPron();
+}
+
+function renderPartidos(){
+  const gArr=[...new Set(MATCHES.filter(m=>m.type==="group").map(m=>m.round))];
+  document.getElementById("round-tabs-groups").innerHTML=gArr.map(r=>`<button class="group-tab ${r===currentGroupRound?"active":""}" onclick="setGR('${r}',this)">${r}</button>`).join("");
+  const kArr=[...new Set(MATCHES.filter(m=>m.type==="knockout").map(m=>m.round))];
+  document.getElementById("round-tabs-knockouts").innerHTML=kArr.map(r=>`<button class="group-tab ${r===currentKnockoutRound?"active":""}" onclick="setKR('${r}',this)">${r}</button>`).join("");
+  renderML("group",currentGroupRound,"matches-list-groups");
+  renderMR("group",currentGroupRound,"real-matches-groups");
+  renderStandings(currentGroupRound);
+  renderML("knockout",currentKnockoutRound,"matches-list-knockouts");
+  renderMR("knockout",currentKnockoutRound,"real-matches-knockouts");
+}
+function setGR(r,el){currentGroupRound=r;document.querySelectorAll("#round-tabs-groups .group-tab").forEach(t=>t.classList.remove("active"));if(el)el.classList.add("active");renderML("group",r,"matches-list-groups");renderMR("group",r,"real-matches-groups");renderStandings(r);}
+function setKR(r,el){currentKnockoutRound=r;document.querySelectorAll("#round-tabs-knockouts .group-tab").forEach(t=>t.classList.remove("active"));if(el)el.classList.add("active");resolveKnockoutTeams();renderML("knockout",r,"matches-list-knockouts");renderMR("knockout",r,"real-matches-knockouts");}
+
+const resultSel = {};
+
+function selectResult(matchId, choice, homeId, awayId){
+  resultSel[matchId] = choice;
+  const bH=document.getElementById(`rb_${matchId}_home`);
+  const bD=document.getElementById(`rb_${matchId}_draw`);
+  const bA=document.getElementById(`rb_${matchId}_away`);
+  if(bH) bH.className="rs-btn"+(choice==="home"?" active-home":"");
+  if(bD) bD.className="rs-btn"+(choice==="draw"?" active-draw":"");
+  if(bA) bA.className="rs-btn"+(choice==="away"?" active-away":"");
+  const inpBox = document.getElementById(`inp_${matchId}`);
+  const hintEl = document.getElementById(`hint_${matchId}`);
+  if(inpBox){ inpBox.style.display = "block"; }
+  if(hintEl){ hintEl.style.display = "none"; }
+  const ih = document.getElementById(`s_${matchId}_h`);
+  const ia = document.getElementById(`s_${matchId}_a`);
+  if(!ih||!ia) return;
+  ih.classList.remove("invalid"); ia.classList.remove("invalid");
+  if(choice==="home"){
+    const h=parseInt(ih.value)||0, a=parseInt(ia.value)||0;
+    if(h<=a){ ih.value=String(a+1); }
+    if(!ih.value||ih.value==="0") ih.value="1";
+    ia.min=0; ih.min=1;
+    ih.oninput=()=>enforceResult(matchId);
+    ia.oninput=()=>enforceResult(matchId);
+  } else if(choice==="away"){
+    const h=parseInt(ih.value)||0, a=parseInt(ia.value)||0;
+    if(a<=h){ ia.value=String(h+1); }
+    if(!ia.value||ia.value==="0") ia.value="1";
+    ia.min=1; ih.min=0;
+    ih.oninput=()=>enforceResult(matchId);
+    ia.oninput=()=>enforceResult(matchId);
+  } else {
+    if(!ih.value) ih.value="0";
+    ia.value=ih.value;
+    ih.oninput=()=>{ ia.value=ih.value; };
+    ia.oninput=()=>{ ih.value=ia.value; };
+  }
+  ih.focus();
+}
+
+function enforceResult(matchId){
+  const choice=resultSel[matchId];
+  const ih=document.getElementById(`s_${matchId}_h`);
+  const ia=document.getElementById(`s_${matchId}_a`);
+  if(!ih||!ia||!choice)return;
+  const h=parseInt(ih.value)||0, a=parseInt(ia.value)||0;
+  ih.classList.remove("invalid"); ia.classList.remove("invalid");
+  if(choice==="home" && h<=a){ ih.classList.add("invalid"); }
+  if(choice==="away" && a<=h){ ia.classList.add("invalid"); }
+}
+
+function validateAndSave(matchId){
+  const choice = resultSel[matchId];
+  const hEl = document.getElementById(`s_${matchId}_h`);
+  const aEl = document.getElementById(`s_${matchId}_a`);
+  if(!hEl||!aEl){ alert("⚠️ Selecciona un equipo primero"); return; }
+  const h = parseInt(hEl.value), a = parseInt(aEl.value);
+  if(isNaN(h)||isNaN(a)||hEl.value===""||aEl.value===""){
+    alert("⚠️ Ingresa el marcador completo (ambos goles)"); return;
+  }
+  if(!choice){ alert("⚠️ Selecciona primero quién gana o si es empate"); return; }
+  if(choice==="home" && h<=a){
+    hEl.classList.add("invalid");
+    alert(`⚠️ Seleccionaste que gana el local, pero ${h}-${a} no lo refleja.\nEl local debe tener más goles (ej: ${a+1}-${a}).`);
+    return;
+  }
+  if(choice==="away" && a<=h){
+    aEl.classList.add("invalid");
+    alert(`⚠️ Seleccionaste que gana el visitante, pero ${h}-${a} no lo refleja.\nEl visitante debe tener más goles (ej: ${h}-${h+1}).`);
+    return;
+  }
+  if(choice==="draw" && h!==a){
+    hEl.classList.add("invalid"); aEl.classList.add("invalid");
+    alert(`⚠️ Seleccionaste empate, pero ${h}-${a} no es empate.\nAmbos deben ser iguales (ej: ${h}-${h}).`);
+    return;
+  }
+  hEl.classList.remove("invalid"); aEl.classList.remove("invalid");
+  saveMatch(matchId);
+}
+
+function renderML(type, roundFilter, containerId){
+  const real=getRealResults();
+  const myPreds=load("match_preds")?.[currentUser.id]||{};
+  const matches=MATCHES.filter(m=>m.type===type&&m.round===roundFilter);
+  const el=document.getElementById(containerId);if(!el)return;
+  if(!matches.length){el.innerHTML=`<div style="color:var(--muted);font-size:13px;padding:16px">Sin partidos en esta ronda aún.</div>`;return}
+
+  el.innerHTML=matches.map(m=>{
+    const now=new Date(), kickoff=new Date(m.kickoff);
+    const opensAt  = new Date(kickoff.getTime()-24*60*60*1000);
+    const closesAt = new Date(kickoff.getTime()-15*60*1000); // cierra 15 min antes del partido
+    const hasResult  = !!real.matches[m.id];
+    const isOpen     = !hasResult && (TEST_MODE || (now>=opensAt && now<=closesAt));
+    const isClosed   = !hasResult && !TEST_MODE && now>closesAt;
+    const isPending  = !hasResult && !TEST_MODE && now<opensAt;
+
+    let badge = `<span class="badge badge-gray">Abre 24h antes</span>`;
+    if(hasResult)  badge = `<span class="badge badge-gold">Oficial</span>`;
+    else if(isOpen)  badge = `<span class="badge badge-green">Abierto</span>`;
+    else if(isClosed) badge = `<span class="badge badge-red">Bloqueado</span>`;
+
+    const p = myPreds[m.id]||{h:"",a:""};
+    if(p.h!=="" && !resultSel[m.id]){
+      const ph=parseInt(p.h),pa=parseInt(p.a);
+      if(ph>pa) resultSel[m.id]="home";
+      else if(pa>ph) resultSel[m.id]="away";
+      else resultSel[m.id]="draw";
+    }
+    const sel = resultSel[m.id];
+
+    let sideClass="pending", sidePts="—", sideIcon="⏳", sideLbl="Pts\nobtenidos";
+    if(hasResult){
+      if(p.h!==""){
+        const r=matchPts(parseInt(p.h),parseInt(p.a),parseInt(real.matches[m.id].home),parseInt(real.matches[m.id].away));
+        sidePts=r.pts===0?"0":"+"+r.pts;
+        sideClass=r.tipo;
+        sideIcon=r.tipo==="exacto"?"🎯":r.tipo==="ganador"?"✓":"✗";
+        sideLbl="Pts\nobtenidos";
+      } else {
+        sidePts="0";sideClass="cero";sideIcon="✗";sideLbl="Sin\npredicción";
+      }
+    }
+    const sideBox=`<div class="pts-side-box ${sideClass}">
+      <div class="pts-side-icon">${sideIcon}</div>
+      <div class="pts-side-num" style="${hasResult && p.h!=='' ? 'color:#4ade80' : ''}">${sidePts}</div>
+      <div class="pts-side-lbl">${sideLbl}</div>
+    </div>`;
+
+    // Nombre abreviado para botones de resultado
+    const homeLbl = (m.home.name||"Local").split(" ").slice(0,2).join(" ");
+    const awayLbl = (m.away.name||"Visita").split(" ").slice(0,2).join(" ");
+
+    let centerHTML = "";
+    if(hasResult){
+      centerHTML = `<div class="match-locked">
+        <span class="score-display">${p.h!==""?p.h:"?"} - ${p.a!==""?p.a:"?"}</span>
+      </div>`;
+    } else if(isClosed){
+      centerHTML = `<div class="match-locked">
+        <span class="score-display" style="color:var(--muted)">${p.h!==""?p.h:"?"} - ${p.a!==""?p.a:"?"}</span>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">🔒 Cerrado</div>
+      </div>`;
+    } else {
+      const dis = isPending ? "disabled" : "";
+      const disStyle = isPending ? "opacity:.45;cursor:not-allowed;pointer-events:none" : "";
+      const selHome = sel==="home" ? " active-home" : "";
+      const selDraw = sel==="draw" ? " active-draw" : "";
+      const selAway = sel==="away" ? " active-away" : "";
+      const showInputs = isOpen && sel;
+      const inputsHtml = isOpen ? `
+        <div id="hint_${m.id}" style="font-size:11px;color:var(--muted);margin-top:8px; display:${showInputs ? 'none' : 'block'}">
+          ↑ Selecciona un ganador para ingresar el marcador
+        </div>
+        <div id="inp_${m.id}" style="display:${showInputs ? 'block' : 'none'}">
+          <div class="score-inputs" style="margin-top:8px">
+            <input type="number" id="s_${m.id}_h" class="score-input" value="${p.h}" min="0" max="20" placeholder="0">
+            <span style="color:var(--muted);font-weight:700;font-size:20px">-</span>
+            <input type="number" id="s_${m.id}_a" class="score-input" value="${p.a}" min="0" max="20" placeholder="0">
+          </div>
+          <button class="btn btn-sm btn-outline" style="margin-top:8px;width:100%" onclick="validateAndSave('${m.id}')">Guardar predicción</button>
+        </div>
+      ` : "";
+      const savedHint = (p.h!=="" && isOpen) ? `<div style="font-size:11px;color:var(--muted);margin-top:4px">Guardado: ${p.h}-${p.a}</div>` : "";
+      const knockoutNote = (type==="knockout") ? `<div style="font-size:10px;color:#ffffff;margin-top:6px;text-align:center">⏱ Solo 90 min reglamentarios</div>` : "";
+      centerHTML = `
+        <div class="result-selector" style="${disStyle}">
+          <button id="rb_${m.id}_home" class="rs-btn${selHome}" ${dis} onclick="selectResult('${m.id}','home','${m.home.id}','${m.away.id}')">${homeLbl}</button>
+          <button id="rb_${m.id}_draw" class="rs-btn${selDraw}" ${dis} onclick="selectResult('${m.id}','draw','${m.home.id}','${m.away.id}')">Empate</button>
+          <button id="rb_${m.id}_away" class="rs-btn${selAway}" ${dis} onclick="selectResult('${m.id}','away','${m.home.id}','${m.away.id}')">${awayLbl}</button>
+        </div>
+        ${isPending ? `<div style="font-size:11px;color:var(--muted);margin-top:6px;text-align:center">⏳ Se habilita 24h antes del partido</div>` : ""}
+        ${knockoutNote}
+        ${inputsHtml}
+        ${savedHint}
+      `;
+    }
+
+    const cardContent=`<div class="match-card ${hasResult?"historical":""}">
+      <div class="match-card-inner">
+        <div class="match-date"><span>${m.date}</span>${badge}</div>
+        <div class="match-body">
+          <div class="match-team">${getFlagHtml(m.home.code)}<span class="tname">${m.home.name}</span></div>
+          <div style="flex:1.5;text-align:center">${centerHTML}</div>
+          <div class="match-team">${getFlagHtml(m.away.code)}<span class="tname">${m.away.name}</span></div>
+        </div>
+      </div>
+    </div>`;
+    return `<div class="match-outer">${sideBox}${cardContent}</div>`;
+  }).join("");
+}
+
+function renderMR(type,roundFilter,containerId){
+  const real=getRealResults();const matches=MATCHES.filter(m=>m.type===type&&m.round===roundFilter);
+  const el=document.getElementById(containerId);if(!el)return;
+  const finished=matches.filter(m=>real.matches[m.id]);
+  if(!finished.length){el.innerHTML=`<div class="no-results-hint">Los resultados aparecerán aquí automáticamente.</div>`;return}
+  el.innerHTML=finished.map(m=>{
+    const rs=real.matches[m.id];const rh=parseInt(rs.home),ra=parseInt(rs.away);
+    const winner=rh>ra?m.home.name:ra>rh?m.away.name:"Empate (90 min)";
+    const note = m.type==="knockout" ? `<div style="font-size:10px;color:#ffffff;margin-top:2px">Resultado a 90 min</div>` : "";
+    return `<div class="match-card-real">
+      <div class="match-date"><span>${m.date}</span><span class="badge badge-gold">Oficial ✓</span></div>
+      <div class="match-body">
+        <div class="match-team">${getFlagHtml(m.home.code)}<span class="tname">${m.home.name}</span></div>
+        <div style="flex:1.5;text-align:center"><div class="score-real">${rs.home} - ${rs.away}</div><div style="font-size:11px;color:var(--muted);margin-top:4px">${winner}</div>${note}</div>
+        <div class="match-team">${getFlagHtml(m.away.code)}<span class="tname">${m.away.name}</span></div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function renderStandings(groupRound){
+  const g = groupRound.replace("Grupo ","");
+  const teams = GROUPS[g];
+  if(!teams) return;
+  const stand = calcGroupStandings(g);
+
+  // Reconstruir stats para mostrar tabla completa (incluye equipos sin partidos)
+  const real = getRealResults();
+  const statsMap = {};
+  teams.forEach(t => { statsMap[t.id] = {pj:0,g:0,e:0,p:0,gf:0,gc:0,pts:0}; });
+  MATCHES.filter(m=>m.groupLetter===g && real.matches[m.id]).forEach(m=>{
+    const rs=real.matches[m.id];
+    const rh=parseInt(rs.home), ra=parseInt(rs.away);
+    statsMap[m.home.id].pj++; statsMap[m.away.id].pj++;
+    statsMap[m.home.id].gf+=rh; statsMap[m.home.id].gc+=ra;
+    statsMap[m.away.id].gf+=ra; statsMap[m.away.id].gc+=rh;
+    if(rh>ra){ statsMap[m.home.id].g++; statsMap[m.home.id].pts+=3; statsMap[m.away.id].p++; }
+    else if(ra>rh){ statsMap[m.away.id].g++; statsMap[m.away.id].pts+=3; statsMap[m.home.id].p++; }
+    else { statsMap[m.home.id].e++; statsMap[m.home.id].pts++; statsMap[m.away.id].e++; statsMap[m.away.id].pts++; }
+  });
+
+  const sorted = stand.length ? stand.map(s => ({...s, ...statsMap[s.teamId]})) :
+    teams.map(t => ({teamId: t.id, ...statsMap[t.id]}));
+  if(!sorted.length) sorted.push(...teams.map(t=>({teamId:t.id,...statsMap[t.id]})));
+
+  document.getElementById("standings-title").innerText=`POSICIONES GRUPO ${g}`;
+  document.getElementById("standings-container").innerHTML=`<table class="standings-table"><thead><tr>
+    <th>Equipo</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>DG</th><th class="pts-col">Pts</th>
+  </tr></thead><tbody>${sorted.map((s,i)=>{
+    const team = getTeam(s.teamId)||{name:s.teamId,code:null};
+    const dg=(s.gf-s.gc);
+    const dgStr=dg>0?"+"+dg:dg;
+    const classStr=i<2?"background:rgba(0,132,61,.06)":i===2?"background:rgba(240,171,0,.04)":"";
+    return `<tr style="${classStr}"><td class="team-col"><span class="rank-pos">${i+1}.</span> ${getFlagHtml(team.code)} ${team.name}</td>
+      <td>${s.pj}</td><td>${s.g}</td><td>${s.e}</td><td>${s.p}</td>
+      <td style="color:${dg>=0?'#4ade80':'#f87171'}">${dgStr}</td>
+      <td class="pts-col">${s.pts}</td></tr>`;
+  }).join("")}</tbody></table>
+  <div style="margin-top:8px;font-size:10px;color:var(--muted);display:flex;gap:12px">
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;background:rgba(0,132,61,.35);border-radius:2px;display:inline-block"></span>Clasifica directo</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;background:rgba(240,171,0,.35);border-radius:2px;display:inline-block"></span>Posible mejor 3°</span>
+  </div>`;
+}
+
+function saveMatch(mid){
+  const h=document.getElementById(`s_${mid}_h`).value;
+  const a=document.getElementById(`s_${mid}_a`).value;
+  if(h===""||a==="")return;
+  let all=load("match_preds")||{};
+  if(!all[currentUser.id])all[currentUser.id]={};
+  all[currentUser.id][mid]={h,a};save("match_preds",all);renderPartidos();
+}
+
+let gSels={};
+function renderGrupos(){
+  const p=load("group_preds")?.[currentUser.id];const closed=isPronClosed();
+  document.getElementById("grupos-error").classList.add("hidden");
+  if(p){
+    document.getElementById("grupos-form").classList.add("hidden");
+    document.getElementById("grupos-locked-view").classList.remove("hidden");
+    const tName=(g,id)=>{const tm=GROUPS[g].find(x=>x.id===id);return tm?`<span style="margin-right:8px">${getFlagHtml(tm.code)}</span>${tm.name}`:""};
+    const ptsBadge=(g,pos,id)=>{
+      const r=groupPickPts(g,pos,id);
+      if(r.pts===null) return `<span class="badge badge-gray" style="margin-left:auto">Pendiente</span>`;
+      if(r.status==="exacto") return `<span class="badge badge-green" style="margin-left:auto">+${r.pts} pts</span>`;
+      if(r.status==="parcial") return `<span class="badge badge-gold" style="margin-left:auto">+${r.pts} pts</span>`;
+      return `<span class="badge badge-red" style="margin-left:auto">0 pts</span>`;
+    };
+    document.getElementById("grupos-locked-content").innerHTML=Object.keys(GROUPS).map(g=>`
+      <div class="group-card"><div class="group-header">GRUPO ${g}</div><div style="padding:14px;font-size:14px;line-height:2">
+        <div style="display:flex;align-items:center">🥇 ${tName(g,p[g][1])} ${ptsBadge(g,1,p[g][1])}</div>
+        <div style="display:flex;align-items:center">🥈 ${tName(g,p[g][2])} ${ptsBadge(g,2,p[g][2])}</div>
+        ${p[g][3]?`<div style="display:flex;align-items:center">🥉 ${tName(g,p[g][3])} <span class="badge badge-gold" style="margin-left:8px">Mejor 3°</span> ${ptsBadge(g,3,p[g][3])}</div>`:""}
+      </div></div>`).join("");
+  } else if(closed){
+    document.getElementById("grupos-form").classList.add("hidden");
+    document.getElementById("grupos-locked-view").classList.remove("hidden");
+    document.getElementById("grupos-locked-content").innerHTML=`<div class="locked-banner">🔒 El plazo para elegir clasificados ya cerró.</div>`;
+  } else {
+    document.getElementById("grupos-form").classList.remove("hidden");
+    document.getElementById("grupos-locked-view").classList.add("hidden");
+    const tl=timeLeft();
+    let cdEl=document.getElementById("grupos-cd");
+    if(!cdEl){cdEl=document.createElement("div");cdEl.id="grupos-cd";const gf=document.getElementById("grupos-form");gf.insertBefore(cdEl,gf.firstChild);}
+    cdEl.innerHTML=`<div class="countdown-banner">⏳ Cierra en <span class="countdown-val">${tl}</span>&nbsp;· 11 Jun · 14:00 hrs</div>`;
+    document.getElementById("grupos-list").innerHTML=Object.entries(GROUPS).map(([g,teams])=>`
+      <div class="group-card"><div class="group-header">GRUPO ${g}</div><div style="padding:16px">
+        <div style="font-size:11px;color:var(--wc-gold);margin-bottom:4px;font-weight:600">🥇 1° Lugar</div>
+        <div class="selector-row">${teams.map(t=>`<div class="team-pill" id="g_${g}_1_${t.id}" onclick="selG('${g}',1,'${t.id}')">${getFlagHtml(t.code)} ${t.name}</div>`).join("")}</div>
+        <div style="font-size:11px;color:#93c5fd;margin-top:12px;margin-bottom:4px">🥈 2° Lugar</div>
+        <div class="selector-row">${teams.map(t=>`<div class="team-pill" id="g_${g}_2_${t.id}" onclick="selG('${g}',2,'${t.id}')">${getFlagHtml(t.code)} ${t.name}</div>`).join("")}</div>
+        <div style="font-size:11px;color:var(--wc-gold);margin-top:12px;margin-bottom:4px">🥉 Mejor Tercero (solo 8 pasan)</div>
+        <div class="selector-row">${teams.map(t=>`<div class="team-pill" id="g_${g}_3_${t.id}" onclick="selG('${g}',3,'${t.id}')">${getFlagHtml(t.code)} ${t.name}</div>`).join("")}</div>
+      </div></div>`).join("");
+  }
+  renderRealGroupResults();
+}
+function renderRealGroupResults(){
+  document.getElementById("real-group-tabs").innerHTML=Object.keys(GROUPS).map(g=>`<button class="group-tab ${g===currentRealGroupTab?"active":""}" onclick="setRGT('${g}',this)">${g}</button>`).join("");
+  renderRGP(currentRealGroupTab);
+}
+function setRGT(g,el){currentRealGroupTab=g;document.querySelectorAll("#real-group-tabs .group-tab").forEach(t=>t.classList.remove("active"));if(el)el.classList.add("active");renderRGP(g);}
+function renderRGP(g){
+  const real=getRealResults();const ms=MATCHES.filter(m=>m.groupLetter===g);const fin=ms.filter(m=>real.matches[m.id]);
+  const el=document.getElementById("real-group-results");if(!el)return;
+  if(!fin.length){el.innerHTML=`<div class="no-results-hint">Sin resultados en el Grupo ${g} aún.</div>`;return}
+  el.innerHTML=fin.map(m=>{const rs=real.matches[m.id];const rh=parseInt(rs.home),ra=parseInt(rs.away);const winner=rh>ra?m.home.name:ra>rh?m.away.name:"Empate";return `<div class="match-card-real"><div class="match-date"><span>${m.date}</span><span class="badge badge-gold">Oficial ✓</span></div><div class="match-body"><div class="match-team">${getFlagHtml(m.home.code)}<span class="tname">${m.home.name}</span></div><div style="flex:1.5;text-align:center"><div class="score-real">${rs.home} - ${rs.away}</div><div style="font-size:11px;color:var(--muted);margin-top:4px">${winner}</div></div><div class="match-team">${getFlagHtml(m.away.code)}<span class="tname">${m.away.name}</span></div></div></div>`;}).join("");
+}
+function selG(g,pos,tid){
+  if(!gSels[g])gSels[g]={};
+  if(gSels[g][pos]===tid){delete gSels[g][pos];}
+  else{[1,2,3].forEach(p=>{if(gSels[g][p]===tid)delete gSels[g][p]});gSels[g][pos]=tid;}
+  GROUPS[g].forEach(t=>{[1,2,3].forEach(p=>{let el=document.getElementById(`g_${g}_${p}_${t.id}`);if(el){el.className="team-pill";if(gSels[g]&&gSels[g][p]===t.id)el.className+=" sel-"+(p===3?"3rd":p);}});});
+}
+function saveGrupos(){
+  if(isPronClosed())return alert("⏰ El plazo para clasificados ya cerró.");
+  let e=document.getElementById("grupos-error");let m12=[],th=0;
+  Object.keys(GROUPS).forEach(g=>{if(!gSels[g]||!gSels[g][1]||!gSels[g][2])m12.push(g);if(gSels[g]&&gSels[g][3])th++;});
+  if(m12.length){e.innerHTML=`⚠️ Falta 1° y 2° en grupos: <strong>${m12.join(", ")}</strong>`;e.classList.remove("hidden");return}
+  if(th!==8){e.innerHTML=`⚠️ Necesitas EXACTAMENTE 8 terceros. Llevas <strong>${th}</strong>.`;e.classList.remove("hidden");return}
+  if(!confirm("¿Guardar clasificados? NO se puede modificar."))return;
+  let all=load("group_preds")||{};all[currentUser.id]=gSels;save("group_preds",all);renderGrupos();
+}
+
+function renderAdmin(){
+  const allRounds=[...new Set(MATCHES.map(m=>m.round))];
+  document.getElementById("admin-round-tabs").innerHTML=allRounds.map(r=>`<button class="group-tab ${r===currentAdminRound?"active":""}" onclick="setAR('${r}',this)">${r}</button>`).join("");
+  renderAM();
+  const sel=(id)=>{const s=document.getElementById(id);s.innerHTML=`<option value="">— Seleccionar —</option>`+QUALIFIED_TEAMS.map(t=>`<option value="${t.id}">${t.name}</option>`).join("");};
+  ["admin-winner","admin-second","admin-third"].forEach(sel);
+  const real=getRealResults();
+  if(real.winners){
+    if(real.winners[1])document.getElementById("admin-winner").value=real.winners[1];
+    if(real.winners[2])document.getElementById("admin-second").value=real.winners[2];
+    if(real.winners[3])document.getElementById("admin-third").value=real.winners[3];
+  }
+  const users=load("users")||{};
+  const uList=Object.keys(users);
+  const uEl=document.getElementById("admin-users-list");
+  if(uEl){
+    if(!uList.length){
+      uEl.innerHTML=`<div style="color:var(--muted);font-size:13px">Sin usuarios registrados.</div>`;
+    } else {
+      uEl.innerHTML=uList.map(uid=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
+          <div style="flex:1;font-size:14px;font-weight:500">${users[uid].name}
+            <span style="color:var(--muted);font-size:12px;margin-left:4px">@${uid}</span>
+          </div>
+          <button class="btn btn-sm" style="background:rgba(200,16,46,.15);color:#f87171;border:1px solid rgba(200,16,46,.3);width:auto;padding:5px 12px"
+            onclick="deleteUser('${uid}')">✕ Eliminar</button>
+        </div>`).join("");
+    }
+  }
+}
+
+function deleteUser(uid){
+  if(!confirm(`¿Eliminar al usuario "@${uid}" y todas sus predicciones?`)) return;
+  const users=load("users")||{}; delete users[uid]; save("users",users);
+  ["preds","match_preds","group_preds"].forEach(key=>{ const d=load(key)||{}; delete d[uid]; save(key,d); });
+  renderAdmin(); renderRanking();
+  alert(`✅ Usuario @${uid} eliminado.`);
+}
+
+function resetMyData(){
+  if(!confirm(`¿Borrar TUS predicciones de prueba? Los demás no se ven afectados.`)) return;
+  ["preds","match_preds","group_preds"].forEach(key=>{ const d=load(key)||{}; delete d[currentUser.id]; save(key,d); });
+  Object.keys(resultSel).forEach(k=>delete resultSel[k]);
+  alert("✅ Tus datos de prueba fueron borrados.");
+  renderRanking();
+}
+function setAR(r,el){currentAdminRound=r;document.querySelectorAll("#admin-round-tabs .group-tab").forEach(t=>t.classList.remove("active"));if(el)el.classList.add("active");renderAM();}
+function renderAM(){
+  // Resolver equipos para los partidos knockout antes de mostrar el admin
+  resolveKnockoutTeams();
+  const real=getRealResults();const ms=MATCHES.filter(m=>m.round===currentAdminRound);
+  document.getElementById("admin-matches-list").innerHTML=ms.map(m=>`
+    <div style="margin-bottom:10px;padding:12px;background:var(--bg3);border-radius:8px">
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px">${getFlagHtml(m.home.code)} ${m.home.name} vs ${getFlagHtml(m.away.code)} ${m.away.name} <span style="color:var(--muted);font-size:11px">${m.date}</span></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <input type="number" id="ar_${m.id}_h" value="${real.matches[m.id]?real.matches[m.id].home:""}" placeholder="Local" style="width:58px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px;color:var(--text);text-align:center;font-size:16px;font-weight:600;outline:none">
+        <span style="color:var(--muted);font-weight:700">-</span>
+        <input type="number" id="ar_${m.id}_a" value="${real.matches[m.id]?real.matches[m.id].away:""}" placeholder="Visita" style="width:58px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px;color:var(--text);text-align:center;font-size:16px;font-weight:600;outline:none">
+        <button class="btn btn-sm" onclick="saveR('${m.id}')">Guardar</button>
+        ${real.matches[m.id]?`<span class="badge badge-green">✓ ${real.matches[m.id].home}-${real.matches[m.id].away}</span>
+        <button class="btn btn-sm" style="background:rgba(200,16,46,.15);color:#f87171;border:1px solid rgba(200,16,46,.3);width:auto;padding:5px 12px" onclick="deleteR('${m.id}')">✕ Borrar</button>`:""}
+      </div>
+    </div>`).join("")||`<div style="color:var(--muted);font-size:13px">Sin partidos.</div>`;
+}
+function saveR(mid){
+  const h=document.getElementById(`ar_${mid}_h`).value;const a=document.getElementById(`ar_${mid}_a`).value;
+  if(h===""||a==="")return alert("Ingresa ambos marcadores");
+  let r=getRealResults();r.matches[mid]={home:parseInt(h),away:parseInt(a)};
+  save("real",r).then(()=>{
+    resolveKnockoutTeams(); // Recalcular equipos tras guardar resultado
+    renderAM();
+    renderRanking();
+    alert("✅ Resultado guardado");
+  });
+}
+function deleteR(mid){
+  if(!confirm("¿Borrar este resultado? El partido quedará sin marcador, como si no se hubiera cargado."))return;
+  let r=getRealResults();
+  delete r.matches[mid];
+  save("real",r).then(()=>{
+    resolveKnockoutTeams(); // Recalcular cruces de eliminatoria sin este resultado
+    renderAM();
+    renderRanking();
+    alert("✅ Resultado borrado");
+  });
+}
+function saveRealWinners(){
+  const w=document.getElementById("admin-winner").value;const s=document.getElementById("admin-second").value;const t=document.getElementById("admin-third").value;
+  if(!w||!s||!t)return alert("Selecciona los 3 ganadores");
+  let r=getRealResults();r.winners={1:w,2:s,3:t};save("real",r);alert("✅ Podio guardado");renderRanking();
+}
+function resetAll(){
+  if(!confirm("¿Borrar TODOS los datos? No hay vuelta atrás."))return;
+  if(!confirm("¿ABSOLUTAMENTE SEGURO?"))return;
+  Object.keys(localStorage).filter(k=>k.startsWith(PREFIX)).forEach(k=>localStorage.removeItem(k));
+  location.reload();
+}
+
+function toggleDemo(on){
+  TEST_MODE = on;
+  const badge = document.getElementById("demo-badge");
+  if(badge){
+    badge.textContent = on ? "ACTIVO" : "INACTIVO";
+    badge.className   = on ? "badge badge-gold" : "badge badge-gray";
+    badge.style.background = on ? "rgba(240,171,0,.2)" : "";
+  }
+  const pPage = document.getElementById("page-partidos");
+  const ePage = document.getElementById("page-eliminatorias");
+  if(pPage&&pPage.classList.contains("active"))  renderPartidos();
+  if(ePage&&ePage.classList.contains("active"))  renderPartidos();
+  if(on){
+    alert("🎮 Modo Demo ACTIVADO\n\nAhora los botones de selección están habilitados en todos los partidos.\n\nVe a la sección Partidos o Fase Eliminatoria para verlo.\n\nRecuerda desactivarlo cuando termines.");
+  }
+}
+</script>
+</body>
+</html>
